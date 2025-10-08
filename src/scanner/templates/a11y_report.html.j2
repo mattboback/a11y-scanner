@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>{{ model.title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;          /* slate-900 */
+      --panel: #111827;       /* gray-900 */
+      --card: #0b1220;        /* deep panel */
+      --text: #e5e7eb;        /* gray-200 */
+      --muted: #9ca3af;       /* gray-400 */
+      --accent: #93c5fd;      /* blue-300 */
+      --ok: #34d399;          /* emerald-400 */
+      --warn: #fbbf24;        /* amber-400 */
+      --bad: #f87171;         /* red-400 */
+      --minor: #fcd34d;       /* amber-300 */
+      --border: #1f2937;      /* gray-800 */
+      --chip: #111827;
+      --link: #93c5fd;
+      --code-bg: #0b1320;
+      --code-border: #1e293b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 2rem;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji;
+      background: radial-gradient(1200px 800px at 10% 10%, #0b1320 0, #0f172a 50%, #0b1220 100%);
+      color: var(--text);
+    }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    header {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(17,24,39,.7), rgba(11,19,32,.6));
+      backdrop-filter: blur(6px);
+      border-radius: 16px;
+      padding: 1.25rem 1.25rem 1rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    header h1 {
+      margin: 0 0 .25rem 0;
+      font-size: 1.5rem;
+      letter-spacing: .25px;
+    }
+    header .meta { color: var(--muted); font-size: .9rem; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(12,18,31,.75), rgba(9,14,24,.8));
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: 0 10px 24px rgba(0,0,0,.2);
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      gap: .75rem;
+    }
+    .kpi {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: .9rem;
+    }
+    .kpi .label { color: var(--muted); font-size: .85rem; margin-bottom: .35rem; }
+    .kpi .value { font-size: 1.4rem; font-weight: 700; }
+
+    .status-ok { color: var(--ok); }
+    .status-warn { color: var(--warn); }
+    .status-bad { color: var(--bad); }
+
+    .section-title {
+      font-size: 1.1rem;
+      margin: .2rem 0 .8rem 0;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .rules { display: grid; grid-template-columns: 1fr; gap: .9rem; }
+    .rule {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+      padding: .9rem;
+    }
+    .rule-header {
+      display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap;
+      margin-bottom: .5rem;
+    }
+    .rule-id { font-weight: 700; }
+    .chip {
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-size: .75rem; padding: .15rem .5rem;
+      border-radius: 999px; border: 1px solid var(--border); background: var(--chip);
+      color: var(--muted);
+    }
+    .impact-critical .chip-impact { color: var(--bad); border-color: rgba(248,113,113,.35); }
+    .impact-serious .chip-impact  { color: var(--warn); border-color: rgba(251,191,36,.35); }
+    .impact-moderate .chip-impact { color: var(--minor); border-color: rgba(252,211,77,.35); }
+    .impact-minor .chip-impact    { color: var(--muted); }
+    .impact-unknown .chip-impact  { color: var(--muted); }
+
+    .rule-desc { color: var(--muted); margin: .25rem 0 .75rem 0; }
+    .occ-list { display: grid; grid-template-columns: 1fr; gap: .6rem; }
+    .occ {
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: .65rem .75rem;
+      background: linear-gradient(180deg, rgba(16,25,41,.35), rgba(12,18,31,.35));
+    }
+    .occ .row { display:flex; gap: .5rem; flex-wrap: wrap; }
+    .occ .kv { color: var(--muted); font-size: .85rem; }
+    .occ .kv b { color: var(--text); font-weight: 600; }
+    .occ code, pre {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      padding: .35rem .5rem;
+      border-radius: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: .85rem;
+      overflow-x: auto;
+      color: #d1e9ff;
+    }
+    .occ .shot {
+      margin-top: .5rem;
+      border: 1px solid var(--border);
+      background: #0a0f1c;
+      border-radius: 8px;
+      padding: .35rem;
+      max-width: 520px;
+    }
+    .occ .shot img {
+      display:block; width:100%; height:auto; border-radius:6px;
+    }
+
+    .raw-list { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .raw-list a {
+      border: 1px solid var(--border);
+      background: var(--chip);
+      color: var(--text);
+      padding: .25rem .5rem;
+      border-radius: 999px;
+      font-size: .8rem;
+    }
+
+    footer {
+      margin-top: 1.25rem; color: var(--muted); font-size: .85rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="card">
+      <h1>{{ model.title }}</h1>
+      <div class="meta">Generated at: {{ model.generated_at }}</div>
+    </header>
+
+    <section class="card">
+      <div class="section-title">Summary</div>
+      <div class="summary">
+        <div class="kpi">
+          <div class="label">Pages Scanned</div>
+          <div class="value">{{ model.pages_scanned }}</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Total Violations</div>
+          <div class="value {% if model.total_violations == 0 %}status-ok{% elif model.total_violations < 10 %}status-warn{% else %}status-bad{% endif %}">
+            {{ model.total_violations }}
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="label">Raw Artifacts</div>
+          <div class="value">{{ model.raw_files|length }}</div>
+        </div>
+      </div>
+      {% if model.raw_files %}
+      <div style="margin-top:.8rem">
+        <div class="section-title" style="margin-bottom:.4rem">Raw Result Files</div>
+        <div class="raw-list">
+          {% for f in model.raw_files %}
+            <a href="{{ results_web_base }}/{{ f }}" target="_blank" rel="noopener">{{ f }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </section>
+
+    {% if model.total_violations == 0 %}
+      <section class="card">
+        <div class="section-title">Details</div>
+        <p class="rule-desc">No accessibility violations were found.</p>
+      </section>
+    {% else %}
+      <section class="card">
+        <div class="section-title">Violations by Rule</div>
+        <div class="rules">
+          {% for grp in model.by_rule %}
+            <article class="rule {{ grp.impact_class }}">
+              <div class="rule-header">
+                <span class="rule-id">{{ grp.id }}</span>
+                {% if grp.impact %}
+                  <span class="chip chip-impact">impact: {{ grp.impact }}</span>
+                {% else %}
+                  <span class="chip chip-impact">impact: unknown</span>
+                {% endif %}
+                <span class="chip">occurrences: {{ grp.count }}</span>
+                {% if grp.helpUrl %}
+                  <a class="chip" href="{{ grp.helpUrl }}" target="_blank" rel="noopener">learn more</a>
+                {% endif %}
+              </div>
+              {% if grp.description %}
+                <div class="rule-desc">{{ grp.description }}</div>
+              {% elif grp.help %}
+                <div class="rule-desc">{{ grp.help }}</div>
+              {% endif %}
+
+              <div class="occ-list">
+                {% for occ in grp.occurrences %}
+                  <div class="occ">
+                    <div class="row">
+                      <div class="kv"><b>URL:</b> <a href="{{ occ.url }}" target="_blank" rel="noopener">{{ occ.url }}</a></div>
+                      {% if occ.source_file %}<div class="kv"><b>Source:</b> {{ occ.source_file }}</div>{% endif %}
+                      {% if occ.selector %}<div class="kv"><b>Selector:</b> <code>{{ occ.selector }}</code></div>{% endif %}
+                    </div>
+                    {% if occ.html_snippet %}
+                      <div style="margin-top:.45rem">
+                        <div class="kv"><b>HTML Snippet</b></div>
+                        <pre><code>{{ occ.html_snippet | e }}</code></pre>
+                      </div>
+                    {% endif %}
+                    {% if occ.screenshot_filename %}
+                      <div class="shot">
+                        <img src="{{ results_web_base }}/{{ occ.screenshot_filename }}" alt="screenshot of violation {{ grp.id }}">
+                      </div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+
+    <footer>
+      a11y-scanner • Report generated by axe-core + Playwright • {{ model.generated_at }}
+    </footer>
+  </div>
+</body>
+</html>
