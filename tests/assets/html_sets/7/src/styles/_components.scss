@@ -1,0 +1,170 @@
+// stellaris-studio/src/styles/_components.scss
+.c-preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: $color-dark;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  &__text {
+    font-size: 2rem;
+    font-weight: 600;
+    color: $color-light;
+  }
+}
+
+.c-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  height: $header-height;
+  z-index: 100;
+
+  &__logo img {
+    height: 30px;
+  }
+}
+
+.c-nav {
+  display: flex;
+  gap: 2.5rem;
+  a {
+    color: $color-gray;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    &.is-active,
+    &:hover {
+      color: $color-light;
+    }
+  }
+}
+
+.c-cta-button {
+  background: $gradient;
+  color: $color-light;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.c-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  &__title {
+    font-size: clamp(3rem, 10vw, 7rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    .line {
+      display: block;
+      overflow: hidden;
+    }
+  }
+
+  &__subtitle {
+    font-size: 1.25rem;
+    color: $color-gray;
+    max-width: 600px;
+  }
+}
+
+.c-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding: 5rem 2rem;
+
+  &__item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.05);
+    }
+  }
+
+  &__caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: $color-light;
+
+    h3 {
+      font-size: 1.5rem;
+    }
+    span {
+      color: $color-gray;
+    }
+  }
+}
+
+.c-services {
+  padding: 8rem 0;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+  }
+}
+
+.c-service-card {
+  border-top: 2px solid $color-primary;
+  padding-top: 2rem;
+
+  h4 {
+    font-family: $font-secondary;
+    color: $color-gray;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: $color-gray;
+    line-height: 1.6;
+  }
+}
+
+.c-footer {
+  text-align: center;
+  padding: 2rem;
+  color: $color-gray;
+  font-size: 0.9rem;
+}

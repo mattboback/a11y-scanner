@@ -1,0 +1,126 @@
+<!-- stellaris-studio/index.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stellaris Studio - We Create Digital Experiences</title>
+    <link rel="stylesheet" href="src/styles/compiled/style.css" />
+    <!-- GSAP is included via CDN for this standalone example -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"
+      defer
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"
+      defer
+    ></script>
+    <script src="src/js/main.js" type="module" defer></script>
+  </head>
+  <body>
+    <div class="c-preloader">
+      <div class="c-preloader__text">Stellaris Studio</div>
+    </div>
+
+    <header class="c-header">
+      <a href="index.html" class="c-header__logo">
+        <img src="src/assets/stellaris-logo.svg" alt="Stellaris Studio Logo" />
+      </a>
+      <nav class="c-nav">
+        <a href="index.html" class="is-active">Home</a>
+        <a href="about.html">About</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <button class="c-cta-button">Let's Talk</button>
+    </header>
+
+    <main>
+      <section class="c-hero">
+        <h1 class="c-hero__title">
+          <span class="line">We Build Brands</span>
+          <span class="line">for the Bold.</span>
+        </h1>
+        <p class="c-hero__subtitle">
+          Stellaris is a digital-first creative studio crafting unforgettable
+          brand experiences that resonate and inspire.
+        </p>
+      </section>
+
+      <section class="c-showcase">
+        <div class="c-showcase__item" data-parallax-speed="0.1">
+          <a href="portfolio.html">
+            <img
+              src="https://via.placeholder.com/800x1000/111/fff?text=Project+A"
+              alt="Project A"
+            />
+            <div class="c-showcase__caption">
+              <h3>Project Alpha</h3>
+              <span>Branding & Web Design</span>
+            </div>
+          </a>
+        </div>
+        <div class="c-showcase__item" data-parallax-speed="0.2">
+          <a href="portfolio.html">
+            <img
+              src="https://via.placeholder.com/800x1000/222/fff?text=Project+B"
+              alt="Project B"
+            />
+            <div class="c-showcase__caption">
+              <h3>Project Beta</h3>
+              <span>Mobile App Experience</span>
+            </div>
+          </a>
+        </div>
+        <div class="c-showcase__item" data-parallax-speed="0.15">
+          <a href="portfolio.html">
+            <img
+              src="https://via.placeholder.com/800x1000/333/fff?text=Project+C"
+              alt="Project C"
+            />
+            <div class="c-showcase__caption">
+              <h3>Project Gamma</h3>
+              <span>E-commerce Platform</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <section class="c-services">
+        <div class="o-container">
+          <h2 class="c-section-title" data-reveal>Our Expertise</h2>
+          <div class="c-services__grid">
+            <div class="c-service-card">
+              <h4>01.</h4>
+              <h3>Brand Strategy</h3>
+              <p>
+                We define your brand's purpose, voice, and positioning to create
+                a foundation for growth and connection.
+              </p>
+            </div>
+            <div class="c-service-card">
+              <h4>02.</h4>
+              <h3>Digital Design</h3>
+              <p>
+                From websites to mobile apps, we design intuitive and beautiful
+                digital products that users love.
+              </p>
+            </div>
+            <div class="c-service-card">
+              <h4>03.</h4>
+              <h3>Content Creation</h3>
+              <p>
+                Engaging video, photography, and copy that tells your story and
+                captures your audience's attention.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="c-footer">
+      <p>© 2024 Stellaris Studio. A fictional site for testing.</p>
+    </footer>
+  </body>
+</html>

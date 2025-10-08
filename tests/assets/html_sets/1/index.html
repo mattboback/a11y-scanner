@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Bookstore</title>
+    <!-- Multiple CSS files -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="components.css">
+    <!-- JavaScript files with dependencies -->
+    <script src="utils.js" defer></script>
+    <script src="cart.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://via.placeholder.com/150" class="logo-img">
+            <!-- Missing alt attribute for accessibility issue -->
+        </div>
+        <nav>
+            <ul class="main-nav">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Books</a></li>
+                <li><a href="#">Categories</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="cart-icon" tabindex="-1">
+            <!-- Incorrect tabindex usage for accessibility issue -->
+            <img src="https://via.placeholder.com/30" alt="Shopping Cart">
+            <span class="cart-count">0</span>
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <aside class="filters">
+            <h3>Filter Books</h3>
+            <!-- Incorrect heading hierarchy for accessibility issue -->
+            <div class="filter-group">
+                <div>Category</div>
+                <!-- Should be a proper label for accessibility -->
+                <select id="category-filter">
+                    <option value="">All Categories</option>
+                    <option value="fiction">Fiction</option>
+                    <option value="non-fiction">Non-Fiction</option>
+                    <option value="science">Science</option>
+                    <option value="history">History</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <div>Price Range</div>
+                <input type="range" min="0" max="100" value="50" id="price-filter">
+                <!-- Missing label for accessibility issue -->
+                <div class="price-display">$0 - $<span id="price-value">50</span></div>
+            </div>
+            
+            <button class="filter-button">Apply Filters</button>
+        </aside>
+
+        <main>
+            <h1>Featured Books</h1>
+            <div class="book-grid">
+                <article class="book-card">
+                    <img src="https://via.placeholder.com/200x300" alt="The Great Adventure - Book Cover">
+                    <!-- Good alt attribute -->
+                    <h2>The Great Adventure</h2>
+                    <p class="author">By John Smith</p>
+                    <p class="price">$24.99</p>
+                    <div class="book-actions">
+                        <button class="preview-btn" aria-label="Preview book">Preview</button>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </article>
+                
+                <article class="book-card">
+                    <img src="https://via.placeholder.com/200x300">
+                    <!-- Missing alt attribute for accessibility issue -->
+                    <h2>Mystery Island</h2>
+                    <p class="author">By Jane Doe</p>
+                    <p class="price">$19.99</p>
+                    <div class="book-actions">
+                        <button class="preview-btn" aria-label="Preview book">Preview</button>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </article>
+                
+                <article class="book-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Science Today - Book Cover">
+                    <h2>Science Today</h2>
+                    <p class="author">By Dr. Robert Johnson</p>
+                    <p class="price">$32.50</p>
+                    <div class="book-actions">
+                        <button class="preview-btn" aria-label="Preview book">Preview</button>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </article>
+                
+                <div class="book-card">
+                    <!-- Non-semantic element for accessibility issue -->
+                    <img src="https://via.placeholder.com/200x300" alt="History of Rome - Book Cover">
+                    <h2>History of Rome</h2>
+                    <p class="author">By Professor Williams</p>
+                    <p class="price">$28.75</p>
+                    <div class="book-actions">
+                        <button onclick="previewBook(this)" class="preview-btn">Preview</button>
+                        <!-- Missing aria-label for accessibility issue -->
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="book-preview-modal" role="dialog" aria-labelledby="preview-title" aria-modal="true">
+                <!-- Properly implemented dialog for accessibility -->
+                <div class="modal-content">
+                    <button class="close-modal" aria-label="Close preview">&times;</button>
+                    <h2 id="preview-title">Book Preview</h2>
+                    <div class="preview-content">
+                        <img id="preview-image" src="" alt="">
+                        <h3 id="preview-book-title"></h3>
+                        <p id="preview-author"></p>
+                        <p id="preview-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About Us</h4>
+                <p>We are a premier online bookstore offering a wide selection of books across all genres.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#" style="color: #999;">Terms of Service</a></li>
+                    <!-- Low contrast color for accessibility issue -->
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Newsletter</h4>
+                <form>
+                    <input type="email" placeholder="Enter your email">
+                    <!-- Missing label for accessibility issue -->
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Online Bookstore. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
+
+
+
+

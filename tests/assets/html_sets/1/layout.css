@@ -1,0 +1,127 @@
+/*layout.css:*/
+/* Header styles */
+header {
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    width: 100px;
+}
+
+.logo-img {
+    width: 100%;
+}
+
+.main-nav {
+    display: flex;
+    list-style: none;
+}
+
+.main-nav li {
+    margin-left: 20px;
+}
+
+.cart-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #cc0000;
+    color: white;
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Main content layout */
+main {
+    flex: 1;
+    padding: 0 20px;
+}
+
+.filters {
+    width: 250px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.filter-group {
+    margin-bottom: 20px;
+}
+
+.filter-group select,
+.filter-group input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.price-display {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+/* Footer layout */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 40px 20px 10px;
+    margin-top: 40px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    width: 30%;
+    margin-bottom: 20px;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section li {
+    margin-bottom: 8px;
+}
+
+.footer-section a {
+    color: #fff;
+}
+
+.footer-section form input {
+    padding: 8px;
+    width: 70%;
+    border: none;
+    border-radius: 4px 0 0 4px;
+}
+
+.footer-section form button {
+    padding: 8px;
+    border: none;
+    background-color: #0066cc;
+    color: white;
+    border-radius: 0 4px 4px 0;
+}

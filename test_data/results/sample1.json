@@ -1,0 +1,34 @@
+{
+  "scanned_url": "http://localhost:8000/index.html",
+  "source_file": "index.html",
+  "violations": [
+    {
+      "id": "image-alt",
+      "impact": "critical",
+      "description": "Ensures <img> elements have alternate text or a role of none or presentation",
+      "help": "Images must have alternate text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.4/image-alt?application=axe-py",
+      "nodes": [
+        {
+          "target": ["img[alt=\"\"]"],
+          "html": "<img src=\"logo.png\" alt=\"\">"
+        }
+      ],
+      "screenshot_path": "violation-image-alt-12345678-1234-5678-1234-567812345678.png"
+    },
+    {
+      "id": "color-contrast",
+      "impact": "serious",
+      "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA contrast ratio thresholds",
+      "help": "Elements must have sufficient color contrast",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.4/color-contrast?application=axe-py",
+      "nodes": [
+        {
+          "target": [".low-contrast-text"],
+          "html": "<p class=\"low-contrast-text\">This text has low contrast</p>"
+        }
+      ],
+      "screenshot_path": "violation-color-contrast-87654321-4321-8765-4321-876543218765.png"
+    }
+  ]
+}

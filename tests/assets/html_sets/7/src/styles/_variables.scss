@@ -1,0 +1,14 @@
+// stellaris-studio/src/styles/_variables.scss
+$font-primary: "Poppins", sans-serif;
+$font-secondary: "Roboto Mono", monospace;
+
+$color-dark: #0b0a0f;
+$color-light: #f3f4f6;
+$color-gray: #9ca3af;
+$color-primary: #a855f7; // Purple
+$color-secondary: #6366f1; // Indigo
+
+$gradient: linear-gradient(135deg, $color-primary, $color-secondary);
+
+$container-width: 1280px;
+$header-height: 80px;

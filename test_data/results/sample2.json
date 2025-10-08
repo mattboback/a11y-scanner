@@ -1,0 +1,20 @@
+{
+  "scanned_url": "http://localhost:8000/about.html",
+  "source_file": "about.html",
+  "violations": [
+    {
+      "id": "image-alt",
+      "impact": "critical",
+      "description": "Ensures <img> elements have alternate text or a role of none or presentation",
+      "help": "Images must have alternate text",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.4/image-alt?application=axe-py",
+      "nodes": [
+        {
+          "target": ["img[src=\"banner.jpg\"]"],
+          "html": "<img src=\"banner.jpg\">"
+        }
+      ],
+      "screenshot_path": "violation-image-alt-11111111-1111-1111-1111-111111111111.png"
+    }
+  ]
+}

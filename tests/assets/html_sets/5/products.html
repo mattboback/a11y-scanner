@@ -1,0 +1,389 @@
+<!-- products.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gadget Galaxy - Our Products</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <h1>Gadget Galaxy</h1>
+        <p>Your universe of cutting-edge tech!</p>
+        <nav>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="product-detail.html">Product Detail</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <aside class="sidebar">
+        <h2>Filters</h2>
+
+        <section class="filter-section">
+          <h3>Category</h3>
+          <label
+            ><input type="checkbox" name="category" value="smartphones" />
+            Smartphones</label
+          >
+          <label
+            ><input type="checkbox" name="category" value="laptops" />
+            Laptops</label
+          >
+          <label
+            ><input type="checkbox" name="category" value="accessories" />
+            Accessories</label
+          >
+          <label
+            ><input type="checkbox" name="category" value="wearables" />
+            Wearables</label
+          >
+          <label
+            ><input type="checkbox" name="category" value="gaming" />
+            Gaming</label
+          >
+          <label
+            ><input type="checkbox" name="category" value="home-automation" />
+            Home Automation</label
+          >
+          <label
+            ><input type="checkbox" name="category" value="audio" />
+            Audio</label
+          >
+          <label
+            ><input type="checkbox" name="category" value="photography" />
+            Photography</label
+          >
+        </section>
+
+        <section class="filter-section">
+          <h3>Price Range</h3>
+          <div class="price-range-display">
+            $<span id="minPriceDisplay">0</span> - $<span id="maxPriceDisplay"
+              >2500</span
+            >
+          </div>
+          <input
+            type="range"
+            id="priceRange"
+            min="0"
+            max="2500"
+            value="1250"
+            step="50"
+          />
+          <div class="range-labels">
+            <span>$0</span>
+            <span>$2500+</span>
+          </div>
+        </section>
+
+        <section class="filter-section">
+          <h3>Brand</h3>
+          <label
+            ><input type="checkbox" name="brand" value="techcorp" />
+            TechCorp</label
+          >
+          <label
+            ><input type="checkbox" name="brand" value="innovatech" />
+            InnovaTech</label
+          >
+          <label
+            ><input type="checkbox" name="brand" value="cyberdyne" />
+            Cyberdyne</label
+          >
+          <label
+            ><input type="checkbox" name="brand" value="fusion" /> Fusion</label
+          >
+        </section>
+
+        <section class="filter-section">
+          <h3>Customer Rating</h3>
+          <label
+            ><input type="radio" name="rating" value="4up" /> 4 Stars &
+            Up</label
+          >
+          <label
+            ><input type="radio" name="rating" value="3up" /> 3 Stars &
+            Up</label
+          >
+        </section>
+
+        <section class="filter-section">
+          <h3>Availability</h3>
+          <label
+            ><input type="checkbox" name="availability" value="in-stock" /> In
+            Stock Only</label
+          >
+          <label
+            ><input type="checkbox" name="availability" value="pre-order" />
+            Pre-Order</label
+          >
+        </section>
+
+        <section class="filter-section">
+          <h3>Sort By</h3>
+          <select id="sortBy">
+            <option value="featured">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name-asc">Name: A-Z</option>
+            <option value="name-desc">Name: Z-A</option>
+            <option value="newest">Newest Arrivals</option>
+            <option value="top-rated">Top Rated</option>
+          </select>
+        </section>
+      </aside>
+
+      <section class="product-listing">
+        <h2>Our Products</h2>
+        <div class="product-grid">
+          <!-- Product Card 1 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=SuperPhone+X"
+              alt="SuperPhone X"
+            />
+            <h3>SuperPhone X</h3>
+            <p class="price">$799.99</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 2 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=UltraBook+Pro"
+              alt="UltraBook Pro"
+            />
+            <h3>UltraBook Pro</h3>
+            <p class="price">$1299.00</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 3 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=SmartWatch+S"
+              alt="SmartWatch S"
+            />
+            <h3>SmartWatch S</h3>
+            <p class="price">$249.50</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 4 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=ANC+Headphones"
+              alt="Noise-Cancelling Headphones"
+            />
+            <h3>ANC Headphones</h3>
+            <p class="price">$199.99</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 5 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=ErgoMouse+M2"
+              alt="Ergonomic Mouse M2"
+            />
+            <h3>ErgoMouse M2</h3>
+            <p class="price">$49.99</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 6 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=Portable+SSD+1TB"
+              alt="Portable SSD 1TB"
+            />
+            <h3>Portable SSD 1TB</h3>
+            <p class="price">$119.00</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 7 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=Wireless+Charger+Pad"
+              alt="Wireless Charger Pad"
+            />
+            <h3>Wireless Charger</h3>
+            <p class="price">$35.00</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 8 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=ActionCam+4K"
+              alt="Action Camera 4K"
+            />
+            <h3>ActionCam 4K</h3>
+            <p class="price">$329.99</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 9 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=Gaming+Keyboard+RGB"
+              alt="Gaming Keyboard RGB"
+            />
+            <h3>Gaming Keyboard</h3>
+            <p class="price">$89.50</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 10 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=Portable+PowerBank+20K"
+              alt="Portable Power Bank"
+            />
+            <h3>PowerBank 20K</h3>
+            <p class="price">$65.00</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 11 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=VR+Headset+Immersion"
+              alt="VR Headset Immersion"
+            />
+            <h3>VR Headset</h3>
+            <p class="price">$599.00</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 12 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=Smart+Security+Camera"
+              alt="Smart Security Camera"
+            />
+            <h3>Security Camera</h3>
+            <p class="price">$120.00</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 13 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=Drawing+Tablet+Pro"
+              alt="Drawing Tablet Pro"
+            />
+            <h3>Drawing Tablet Pro</h3>
+            <p class="price">$349.99</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 14 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=Gaming+Mouse+Elite"
+              alt="Gaming Mouse Elite"
+            />
+            <h3>Gaming Mouse</h3>
+            <p class="price">$59.99</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 15 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=Portable+Projector"
+              alt="Portable Projector"
+            />
+            <h3>Portable Projector</h3>
+            <p class="price">$279.00</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+
+          <!-- Product Card 16 -->
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=Smart+LightBulb+Set"
+              alt="Smart Light Bulb Set"
+            />
+            <h3>Smart Light Bulbs (4-pack)</h3>
+            <p class="price">$79.00</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >Add to Cart</a
+            >
+          </div>
+        </div>
+        <div class="pagination">
+          <a href="#" class="page-link active">1</a>
+          <a href="#" class="page-link">2</a>
+          <a href="#" class="page-link">3</a>
+          <a href="#" class="page-link">Next »</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        © 2023 Gadget Galaxy. All rights reserved. Made for testing purposes.
+      </p>
+    </footer>
+
+    <script>
+      // Simple JS for price range display
+      const priceRange = document.getElementById("priceRange");
+      const maxPriceDisplay = document.getElementById("maxPriceDisplay");
+
+      // Initialize display with current value
+      maxPriceDisplay.textContent = priceRange.value;
+
+      // Update display on input
+      priceRange.addEventListener("input", (event) => {
+        maxPriceDisplay.textContent = event.target.value;
+      });
+    </script>
+  </body>
+</html>

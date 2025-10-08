@@ -1,0 +1,25 @@
+// stellaris-studio/package.json
+{
+  "name": "stellaris-studio-website",
+  "version": "1.0.0",
+  "description": "Fictional website for Stellaris Studio creative agency.",
+  "main": "src/js/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sass": "sass src/styles/main.scss src/styles/compiled/style.css --watch"
+  },
+  "keywords": [
+    "creative",
+    "agency",
+    "web-design",
+    "gsap"
+  ],
+  "author": "AI Frontend Developer",
+  "license": "ISC",
+  "devDependencies": {
+    "sass": "^1.58.3"
+  },
+  "dependencies": {
+    "gsap": "^3.11.4"
+  }
+}

@@ -1,0 +1,297 @@
+<!-- product-detail.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gadget Galaxy - Product Detail</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <h1>Gadget Galaxy</h1>
+        <p>Your universe of cutting-edge tech!</p>
+        <nav>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="product-detail.html">Product Detail</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container page-content product-detail-page">
+      <nav class="breadcrumb">
+        <a href="index.html">Home</a> > <a href="products.html">Products</a> >
+        SuperPhone X
+      </nav>
+
+      <div class="product-detail-grid">
+        <div class="product-image-gallery">
+          <img
+            src="https://via.placeholder.com/600x400/007bff/FFFFFF?text=SuperPhone+X+-+Main"
+            alt="SuperPhone X - Main Image"
+            class="main-product-image"
+          />
+          <div class="thumbnail-gallery">
+            <img
+              src="https://via.placeholder.com/100x70/F5F5F5/333333?text=View+1"
+              alt="SuperPhone X - Thumbnail 1"
+            />
+            <img
+              src="https://via.placeholder.com/100x70/F5F5F5/333333?text=View+2"
+              alt="SuperPhone X - Thumbnail 2"
+            />
+            <img
+              src="https://via.placeholder.com/100x70/F5F5F5/333333?text=View+3"
+              alt="SuperPhone X - Thumbnail 3"
+            />
+            <img
+              src="https://via.placeholder.com/100x70/F5F5F5/333333?text=View+4"
+              alt="SuperPhone X - Thumbnail 4"
+            />
+          </div>
+        </div>
+
+        <div class="product-info">
+          <h1>SuperPhone X (256GB, Cosmic Blue)</h1>
+          <div class="rating"><span>★★★★☆</span> (245 Reviews)</div>
+          <p class="product-price">$799.99</p>
+
+          <div class="product-options">
+            <div class="option-group">
+              <label for="color">Color:</label>
+              <select id="color">
+                <option value="cosmic-blue">Cosmic Blue</option>
+                <option value="starlight-silver">Starlight Silver</option>
+                <option value="midnight-black">Midnight Black</option>
+                <option value="aurora-green">Aurora Green</option>
+              </select>
+            </div>
+            <div class="option-group">
+              <label for="storage">Storage:</label>
+              <select id="storage">
+                <option value="128gb">128GB</option>
+                <option value="256gb" selected>256GB</option>
+                <option value="512gb">512GB</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="product-actions">
+            <div class="quantity-selector">
+              <label for="quantity">Quantity:</label>
+              <input type="number" id="quantity" value="1" min="1" max="10" />
+            </div>
+            <button class="button primary-button large-button">
+              Add to Cart
+            </button>
+            <button class="button secondary-button large-button">
+              Buy Now
+            </button>
+          </div>
+
+          <div class="product-short-description">
+            <p>
+              Experience unparalleled performance with the SuperPhone X.
+              Featuring a stunning edge-to-edge display, a revolutionary camera
+              system, and all-day battery life. Designed for the future,
+              available today.
+            </p>
+            <ul>
+              <li>
+                <span class="icon">⚡</span> Lightning-fast A17 Bionic Chip
+              </li>
+              <li>
+                <span class="icon">📸</span> Triple-lens 50MP Pro Camera System
+              </li>
+              <li>
+                <span class="icon">🔋</span> Up to 28 hours video playback
+              </li>
+              <li>
+                <span class="icon">💧</span> IP68 Water and Dust Resistance
+              </li>
+              <li><span class="icon">🛡️</span> Ceramic Shield Front Cover</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <section class="product-full-description">
+        <h2>Full Description</h2>
+        <p>
+          The SuperPhone X is more than just a smartphone; it's a gateway to
+          limitless possibilities. Its cutting-edge A17 Bionic chip delivers
+          desktop-level performance in your palm, handling the most demanding
+          apps and games with ease. The triple-lens Pro Camera system captures
+          breathtaking photos and cinematic videos, even in challenging lighting
+          conditions. With an incredibly vibrant Super Retina XDR display, every
+          image and video comes to life with stunning clarity and color
+          accuracy.
+        </p>
+        <p>
+          Built with durability in mind, the SuperPhone X features a ceramic
+          shield front cover, offering four times better drop performance. Its
+          IP68 rating means it can withstand spills and splashes without a
+          problem. Stay connected longer with its extended battery life,
+          optimized software, and fast-charging capabilities. Choose your
+          perfect SuperPhone X and join the next generation of mobile
+          technology.
+        </p>
+        <h3>Key Features:</h3>
+        <ul>
+          <li>Display: 6.7-inch Super Retina XDR with ProMotion</li>
+          <li>Processor: A17 Bionic Chip with 16-core Neural Engine</li>
+          <li>
+            Cameras: 50MP Main, 12MP Ultra-Wide, 12MP Telephoto; 12MP Front
+            Camera
+          </li>
+          <li>Battery: Up to 28 hours video playback</li>
+          <li>Connectivity: 5G, Wi-Fi 6E, Bluetooth 5.3</li>
+          <li>Operating System: GalaxyOS 15.2</li>
+          <li>Security: Face ID, Touch ID (side button)</li>
+        </ul>
+      </section>
+
+      <section class="customer-reviews">
+        <h2>Customer Reviews (245)</h2>
+        <div class="review-summary">
+          <p>Overall Rating: <span>4.5 / 5 Stars</span></p>
+          <div class="progress-bars">
+            <div class="star-row">
+              5 Stars
+              <div class="bar-container">
+                <div class="bar" style="width: 70%"></div>
+              </div>
+              <span>70%</span>
+            </div>
+            <div class="star-row">
+              4 Stars
+              <div class="bar-container">
+                <div class="bar" style="width: 20%"></div>
+              </div>
+              <span>20%</span>
+            </div>
+            <div class="star-row">
+              3 Stars
+              <div class="bar-container">
+                <div class="bar" style="width: 7%"></div>
+              </div>
+              <span>7%</span>
+            </div>
+            <div class="star-row">
+              2 Stars
+              <div class="bar-container">
+                <div class="bar" style="width: 2%"></div>
+              </div>
+              <span>2%</span>
+            </div>
+            <div class="star-row">
+              1 Star
+              <div class="bar-container">
+                <div class="bar" style="width: 1%"></div>
+              </div>
+              <span>1%</span>
+            </div>
+          </div>
+          <button class="button secondary-button">Write a Review</button>
+        </div>
+
+        <div class="individual-reviews">
+          <div class="review-card">
+            <div class="review-header">
+              <span class="review-author">John D.</span>
+              <span class="review-date">Oct 2, 2023</span>
+              <span class="rating">★★★★★</span>
+            </div>
+            <h4>Absolutely Amazing!</h4>
+            <p>
+              This phone exceeds all my expectations. The camera is out of this
+              world, and the speed is incredible. Battery life is also a huge
+              plus. Highly recommend!
+            </p>
+          </div>
+          <div class="review-card">
+            <div class="review-header">
+              <span class="review-author">Sarah L.</span>
+              <span class="review-date">Sep 28, 2023</span>
+              <span class="rating">★★★★☆</span>
+            </div>
+            <h4>Great Phone, Minor Quibbles</h4>
+            <p>
+              It's a fantastic device. The screen is beautiful. My only minor
+              complaint is the lack of a headphone jack, but that's common now.
+              Overall, very satisfied.
+            </p>
+          </div>
+          <div class="review-card">
+            <div class="review-header">
+              <span class="review-author">Mike R.</span>
+              <span class="review-date">Sep 25, 2023</span>
+              <span class="rating">★★★★★</span>
+            </div>
+            <h4>Worth Every Penny</h4>
+            <p>
+              Upgraded from an older model and the difference is night and day.
+              Faster, smoother, and the new features are a game changer. Super
+              happy with my purchase.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="related-products">
+        <h2>Customers Also Viewed</h2>
+        <div class="product-grid">
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=SmartWatch+S"
+              alt="SmartWatch S"
+            />
+            <h3>SmartWatch S</h3>
+            <p class="price">$249.50</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >View Details</a
+            >
+          </div>
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=ANC+Headphones"
+              alt="Noise-Cancelling Headphones"
+            />
+            <h3>ANC Headphones</h3>
+            <p class="price">$199.99</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >View Details</a
+            >
+          </div>
+          <div class="product-card">
+            <img
+              src="https://via.placeholder.com/300x300/F5F5F5/333333?text=Wireless+Charger+Pad"
+              alt="Wireless Charger Pad"
+            />
+            <h3>Wireless Charger</h3>
+            <p class="price">$35.00</p>
+            <a href="product-detail.html" class="button add-to-cart"
+              >View Details</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        © 2023 Gadget Galaxy. All rights reserved. Made for testing purposes.
+      </p>
+    </footer>
+  </body>
+</html>

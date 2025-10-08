@@ -1,0 +1,123 @@
+<!-- contact.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us - QuantumLeap AI</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="main-header">
+      <div class="header-container">
+        <div class="logo"><a href="index.html">QuantumLeap AI</a></div>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="contact.html" class="active">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <a href="#" class="btn btn-secondary">Login</a>
+          <a href="#" class="btn btn-primary">Get Started</a>
+        </div>
+        <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+          <span class="hamburger"></span>
+        </button>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <section class="page-header-section">
+        <div class="container">
+          <h1>Get in Touch</h1>
+          <p>
+            We'd love to hear from you. Whether you have a question about
+            features, pricing, or anything else, our team is ready to answer all
+            your questions.
+          </p>
+        </div>
+      </section>
+
+      <section class="contact-section">
+        <div class="container contact-grid">
+          <div class="contact-form-wrapper">
+            <form action="#" class="contact-form">
+              <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required />
+              </div>
+              <div class="form-group">
+                <label for="email">Work Email</label>
+                <input type="email" id="email" name="email" required />
+              </div>
+              <div class="form-group">
+                <label for="company">Company Name</label>
+                <input type="text" id="company" name="company" />
+              </div>
+              <div class="form-group">
+                <label for="inquiry">How can we help?</label>
+                <select id="inquiry" name="inquiry">
+                  <option>Sales Inquiry</option>
+                  <option>Technical Support</option>
+                  <option>Press & Media</option>
+                  <option>General Question</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="5"
+                  required
+                ></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-large">
+                Send Message
+              </button>
+            </form>
+          </div>
+          <div class="contact-info">
+            <h3>Contact Information</h3>
+            <p>
+              Our team is available to help you from Monday to Friday, 9am to
+              5pm PST.
+            </p>
+            <ul>
+              <li>
+                <strong>Sales:</strong><br /><a
+                  href="mailto:sales@quantumleap.ai"
+                  >sales@quantumleap.ai</a
+                >
+              </li>
+              <li>
+                <strong>Support:</strong><br /><a
+                  href="mailto:support@quantumleap.ai"
+                  >support@quantumleap.ai</a
+                >
+              </li>
+              <li>
+                <strong>Phone:</strong><br /><a href="tel:+18885550101"
+                  >+1 (888) 555-0101</a
+                >
+              </li>
+              <li>
+                <strong>Address:</strong><br />456 Innovation Drive, Suite
+                200<br />San Francisco, CA 94105
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="main-footer">
+      <!-- Footer content is the same as index.html, omitted for brevity -->
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
