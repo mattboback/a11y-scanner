@@ -1,0 +1,112 @@
+# --- Git ---
+# Exclude the entire Git directory and related files
+.git/
+.gitignore
+.gitattributes
+
+# --- Docker ---
+# Exclude Docker related files themselves from the context
+.dockerignore
+Dockerfile*
+docker-compose*.yml
+
+# --- Python Virtual Environments ---
+# Exclude local virtual environments
+env/
+venv/
+.venv/
+ENV/
+
+# --- Python Cache / Build Artifacts ---
+# Exclude bytecode, build directories, distributions etc.
+# These will be generated *inside* the container if needed.
+__pycache__/
+*.py[cod]
+build/
+dist/
+*.egg-info/
+wheels/
+.installed.cfg
+*.egg
+
+# --- Test artifacts / cache ---
+# Exclude test results, coverage data, and caches from the context
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+
+# --- Tests Directory ---
+# Exclude the tests themselves unless you plan to run tests
+# *inside* the final built Docker image (less common for simple scripts).
+# Including tests increases the build context size.
+tests/
+
+# --- Project Specific ---
+
+# Local environment configuration - Use Docker env vars or config files instead
+# These should NOT be copied into the image.
+.env*
+!.env.example
+
+# Data directory - Mount via volume at runtime, NEVER include in build context
+data/
+
+# Log files
+*.log
+logs/
+
+# --- IDE / Editor / OS ---
+# Exclude configuration and temporary files specific to local development setups
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+*.bak
+*.swp
+*~
+
+# --- Documentation/Other ---
+# Often exclude documentation source files if not needed in the final image
+# docs/
+# notebooks/
+
+websiteToTest
+data
+data_parse
+
+# Venvs and caches
+.venv
+venv
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+ruff_cache/
+
+# Git and IDE
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
+
+# Build artifacts
+dist
+build
+*.egg-info
+
+# Tests (not needed in runtime image)
+tests
+
+# Local data (volume-mounted at runtime)
+data/*
+!data/.gitkeep
+
+# Playwright/Reports
+playwright-report
+test-results

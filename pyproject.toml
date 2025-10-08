@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "a11y-scanner"
+version = "0.4.0"
+description = "A web accessibility scanner using Playwright and axe-core for comprehensive testing."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Matt", email = "matt@example.com" }]
+
+dependencies = [
+  "rich>=13.0.0",
+  "axe-playwright-python==0.1.4",
+  "playwright==1.54.0",
+  "docker>=6.0.0",
+  "jinja2>=3.1.3",
+  "fastapi>=0.111.0",
+  "uvicorn[standard]>=0.30.0",
+  "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.0", "pyfakefs", "pytest-cov", "requests", "httpx"]
+dev = ["a11y-scanner[test]", "black", "ruff"]
+
+[tool.setuptools.package-data]
+"scanner" = ["templates/*.j2"]
+[project.scripts]
+scanner = "scanner.main:main"
+scanner-docker = "scanner.container.runner:main"
+scanner-integration = "scanner.container.integration:main"
+scanner-api = "scanner.web.server:run"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+select = ["E", "F", "W", "I", "B", "UP"]
+exclude = ["tests"]
+
+[tool.pytest.ini_options]
+addopts = "-ra -q --strict-markers --cov=src --cov-report=html"
+testpaths = ["tests"]
+log_cli = true
+log_cli_level = "INFO"

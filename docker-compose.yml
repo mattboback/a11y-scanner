@@ -1,0 +1,17 @@
+services:
+  scanner:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ./data:/home/pwuser/data
+    shm_size: "2gb"
+
+  scanner-debug:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ./data:/home/pwuser/data
+    shm_size: "2gb"
+    entrypoint: ["tail", "-f", "/dev/null"]
