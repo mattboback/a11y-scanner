@@ -1,8 +1,163 @@
-# a11y-scanner
+# a11y-scanner (Docker-only)
 
-Docker-first accessibility scanner project scaffolding.
+> Static-site Accessibility Scanner
+>
+> Powered by Python 3.10+, Playwright, Docker, and axe-core.
 
-Work in progress while core pipeline, reporting, and docs are being assembled.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org)
+[![axe-core](https://img.shields.io/badge/axe--core-Playwright-green)](https://github.com/dequelabs/axe-core)
+
+---
+
+## 📚 Documentation
+
+- [Development Guide](docs/development-guide.md) — local setup, testing, linting, and troubleshooting.
+- [Architecture Overview](docs/architecture-overview.md) — how the container runner, pipeline, and reporting layers fit together.
+- [Contributors](CONTRIBUTORS.md) — expectations for new pull requests and ways to get involved.
+
+---
+
+## 🚦 Important: Docker-Only Execution
+
+This project is intentionally containerized. The CLI guards will exit if you attempt to run them directly on your host machine.
+
+- ✅ Run via the Docker SDK runner provided in this repo.
+- ❌ Do not run `python -m scanner.main` on bare metal.
+
+Why? Consistent Playwright dependencies, reproducible results, and a clean developer experience.
+
+---
+
+## 1 · Overview
+
+This project provides an open-source, self-hostable system to run automated accessibility audits on static websites. It is designed to be integrated into CI/CD and executed uniformly in a Docker container.
+
+The container is prepared programmatically via the Docker SDK (no docker-compose required).
+
+---
+
+## 2 · How It Works
+
+1. Place a `site.zip` archive under `data/unzip` or upload it via the API.
+2. The scanner extracts the site to a temp directory.
+3. It starts a local HTTP server serving the extracted files.
+4. It visits each `.html` page with Playwright + axe-core and audits a11y.
+5. It writes full JSON reports (and screenshots) to `data/results`.
+6. It renders a consolidated HTML report under `data/reports/latest.html`.
+
+---
+
+## 3 · Quick Start (Docker Runner)
+
+Prereqs:
+
+- Docker Engine running
+- Python 3.10+ (host, for the thin wrapper that orchestrates Docker)
+
+```bash
+# 0) (first time) create a venv and install the local package
+python -m venv .venv
+. .venv/bin/activate
+pip install -e ".[dev]"
+
+# 1) Build the cached Docker image with deps pre-installed (first run may take a bit)
+python -m scanner.container.runner prepare
+
+# 2) Create a simple sample site (zipped to data/unzip/site.zip)
+python - <<'PY'
+from pathlib import Path
+from zipfile import ZipFile, ZIP_DEFLATED
+root = Path("data/unzip"); root.mkdir(parents=True, exist_ok=True)
+site = root/"site_tmp"; site.mkdir(parents=True, exist_ok=True)
+(site/"index.html").write_text("""<!doctype html>
+<html lang=en><head><meta charset=utf-8><title>Sample</title></head>
+<body><h1>Sample Page</h1><img src="logo.png"><p class="low-contrast-text">Low contrast text</p></body>
+</html>""", encoding="utf-8")
+with ZipFile(root/"site.zip", "w", ZIP_DEFLATED) as z:
+    for p in site.rglob("*"):
+        if p.is_file():
+            z.write(p, p.relative_to(site))
+print("Wrote", (root/"site.zip").resolve())
+PY
+
+# 3) Run the scan
+python -m scanner.container.runner run
+
+# 4) Inspect results
+ls -la data/results
+# macOS
+open data/reports/latest.html
+# Linux
+# xdg-open data/reports/latest.html
+```
+
+### B · Long-running API Server (Demo Ready)
+
+Start the FastAPI server in a Docker container and expose port 8008 on the host:
+
+```bash
+python -m scanner.container.runner serve --port 8008
+# or
+make serve
+```
+
+Upload a zip and view the report:
+
+```bash
+# Reuse the sample site from above (data/unzip/site.zip)
+curl -F "file=@data/unzip/site.zip" http://127.0.0.1:8008/api/scan/zip
+# Open report
+open http://127.0.0.1:8008/reports/latest.html   # macOS
+# xdg-open http://127.0.0.1:8008/reports/latest.html  # Linux
+```
+
+You can also scan live URLs directly:
+
+```bash
+curl -X POST http://127.0.0.1:8008/api/scan/url \
+  -H "Content-Type: application/json" \
+  -d '{"urls":["https://example.com/"]}'
+```
+
+---
+
+## 4 · Project Layout
+
+```
+.
+├── data/                 # Runtime artifacts (zip inputs, results, reports)
+├── docker/               # Dockerfile assets for the runner image
+├── scripts/              # Helper scripts for sample sites, reporting, tests
+├── src/scanner/          # Application code (pipeline, services, web server)
+├── tests/                # Unit and integration tests
+├── Makefile              # Developer shortcuts (install, integration, serve)
+└── pyproject.toml        # Packaging metadata, dependencies, tooling config
+```
+
+Key docs: `docs/development-guide.md` and `docs/architecture-overview.md` expand on this structure.
+
+---
+
+## 5 · Reporting
+
+- Consolidated report template: `scanner/templates/a11y_report.html.j2` (Jinja2).
+- The reporting system aggregates JSON artifacts in `data/results` and writes a single HTML report to `data/reports/latest.html`.
+- Each rule group shows: rule id/impact, description, link to docs, occurrences (URL/source, selector, HTML snippet, screenshot).
+- Raw artifacts (JSON/PNG) are linked.
+
+Local reporting smoke test (no Docker):
+
+```bash
+python - <<'PY'
+from pathlib import Path
+from scanner.reporting.jinja_report import build_report
+out = Path("test_data/reports/test_report.html")
+out.parent.mkdir(parents=True, exist_ok=True)
+build_report(Path("test_data/results"), out, title="Test Accessibility Report")
+print(out.resolve())
+PY
+```
 
 Note on template loading:
 
