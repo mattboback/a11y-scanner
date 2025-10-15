@@ -10,6 +10,18 @@
 
 ---
 
+## ✨ Features
+
+- **Comprehensive Accessibility Testing** — Uses axe-core via Playwright to detect WCAG violations
+- **Containerized & Reproducible** — Docker-first architecture with cached images for fast iteration
+- **Multiple Scan Modes** — Upload ZIP archives or scan live URLs via REST API
+- **Rich HTML Reports** — Consolidated reports with violation screenshots, rule grouping, and direct links to remediation guidance
+- **Security Hardened** — Zip Slip protection, upload size limits, MIME type validation
+- **High Performance** — Browser reuse across scans, element-level screenshots, configurable concurrency
+- **Developer Friendly** — Python 3.10+, comprehensive test coverage, CI/CD ready
+
+---
+
 ## 📚 Documentation
 
 - [Development Guide](docs/development-guide.md) — local setup, testing, linting, and troubleshooting.
@@ -33,6 +45,12 @@ Why? Consistent Playwright dependencies, reproducible results, and a clean devel
 
 This project provides an open-source, self-hostable system to run automated accessibility audits on static websites. It is designed to be integrated into CI/CD and executed uniformly in a Docker container.
 
+**Key Capabilities:**
+- Scan static site archives (ZIP files) or live URLs
+- Generate detailed JSON artifacts and element-level violation screenshots
+- Produce consolidated HTML reports with filtering and grouping
+- Secure by design: Zip Slip prevention, upload validation, container isolation
+
 The container is prepared programmatically via the Docker SDK (no docker-compose required).
 
 ---
@@ -40,11 +58,11 @@ The container is prepared programmatically via the Docker SDK (no docker-compose
 ## 2 · How It Works
 
 1. Place a `site.zip` archive under `data/unzip` or upload it via the API.
-2. The scanner extracts the site to a temp directory.
+2. The scanner safely extracts the site (with Zip Slip protection) to a temp directory.
 3. It starts a local HTTP server serving the extracted files.
-4. It visits each `.html` page with Playwright + axe-core and audits a11y.
-5. It writes full JSON reports (and screenshots) to `data/results`.
-6. It renders a consolidated HTML report under `data/reports/latest.html`.
+4. It visits each `.html` page with Playwright + axe-core and audits a11y using a reusable browser for performance.
+5. It captures element-level screenshots for each violation and writes full JSON reports to `data/results`.
+6. It renders a consolidated HTML report under `data/reports/latest.html` with rule grouping and impact severity.
 
 ---
 
@@ -227,27 +245,26 @@ Notes
 
 ---
 
-## 9 · Breadcrumbs: Next Potential Steps
+## 9 · Recent Improvements
 
-- Add helper scripts
-  - `scripts/create_test_site.sh` to generate and zip a sample site to `data/unzip/site.zip`.
-  - `scripts/test_reporting.sh` to build a local HTML report from `test_data/results`.
-- Reuse a single Playwright browser
-  - Keep one browser/context per run and one page per scan to reduce overhead; optionally add concurrency.
-- Harden ZipService
-  - Prevent Zip Slip path traversal by validating archive members before extraction in `src/scanner/services/zip_service.py`.
-- Persist source file in JSON artifacts
-  - Thread the relative source path into the saved JSON (alongside `scanned_url`) to enrich reporting.
-- CLI and config options
-  - Include/exclude patterns, concurrency level, headless toggle, timeouts, viewport, and screenshot behavior.
-- CI integration
-  - Optional JUnit/SARIF export, severity thresholds to set exit code, and a GitHub Action example.
-- API hardening
-  - Upload size limits, basic auth or tokens, rate limiting, and clearer error responses.
-- Report UX
-  - Filters (by impact/rule), grouping by page, CSV/JSON export of summary, and pagination for large sites.
-- Testing ergonomics
-  - Add a pytest marker to skip the Playwright test by default unless `RUN_E2E=1` is set; document Playwright browser install steps.
+**Security & Robustness:**
+- ✅ **Zip Slip Protection** — Validates archive paths to prevent directory traversal attacks
+- ✅ **API Hardening** — Upload size limits (100MB), MIME type validation, comprehensive error handling
+- ✅ **Source File Tracking** — Persists `source_file` in JSON artifacts for better report context
+
+**Performance & Quality:**
+- ✅ **Browser Reuse** — Single Playwright browser reused across all scans (context manager pattern)
+- ✅ **Element Screenshots** — Captures focused element screenshots with highlights instead of full-page
+- ✅ **Comprehensive Tests** — 30+ unit tests including API endpoint coverage and security validation
+
+## 10 · Future Roadmap
+
+- **Concurrency** — Parallel page scanning with configurable worker pools
+- **Advanced Configuration** — Include/exclude patterns, timeouts, viewport settings, headless toggle
+- **CI/CD Integration** — SARIF export for GitHub Code Scanning, severity thresholds, GitHub Action template
+- **Report Enhancements** — Client-side filtering by impact/rule, grouping by page, CSV export
+- **Background Jobs** — Async scan queue with job ID and status polling for API
+- **Demo & Showcase** — GitHub Pages with sample reports, animated demo GIFs
 
 ---
 

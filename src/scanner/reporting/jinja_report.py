@@ -5,12 +5,18 @@ import logging
 import os
 import sys
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from jinja2 import (ChoiceLoader, Environment, FileSystemLoader, PackageLoader,
-                    TemplateNotFound, select_autoescape)
+from jinja2 import (
+    ChoiceLoader,
+    Environment,
+    FileSystemLoader,
+    PackageLoader,
+    TemplateNotFound,
+    select_autoescape,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -231,7 +237,7 @@ def _build_model(results_dir: Path, title: str) -> ReportModel:
 
     model = ReportModel(
         title=title,
-        generated_at=datetime.utcnow().strftime("%Y-%m-%d %H:%M:%SZ"),
+        generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%SZ"),
         pages_scanned=pages_scanned,
         total_violations=total_violations,
         by_rule=sorted_groups,

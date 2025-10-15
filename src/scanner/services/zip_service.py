@@ -1,4 +1,5 @@
 import logging
+import os
 import sys
 from pathlib import Path
 from zipfile import ZipFile
@@ -31,9 +32,57 @@ class ZipService:
         logger.info("Zip file detected: %s", zip_path)
         return zip_path
 
+    def _is_safe_path(self, base_path: Path, target_path: Path) -> bool:
+        """
+        Check if target_path is safe to extract (prevents Zip Slip).
+        Returns False if the path tries to escape the base directory.
+        """
+        try:
+            # Resolve both paths to absolute, normalized forms
+            base_abs = base_path.resolve()
+            target_abs = target_path.resolve()
+
+            # Check if target is within base (common_path should equal base)
+            common = Path(os.path.commonpath([base_abs, target_abs]))
+            return common == base_abs
+        except (ValueError, OSError):
+            return False
+
+    def _sanitize_archive_member(self, member_name: str) -> str | None:
+        """
+        Sanitize a zip member name, rejecting dangerous paths.
+        Returns None if the member should be skipped.
+        """
+        # Reject absolute paths
+        if os.path.isabs(member_name):
+            logger.warning("Rejecting absolute path in archive: %s", member_name)
+            return None
+
+        # Reject paths with parent directory references
+        if ".." in Path(member_name).parts:
+            logger.warning("Rejecting path with '..' in archive: %s", member_name)
+            return None
+
+        # Normalize the path
+        normalized = os.path.normpath(member_name)
+
+        # Double-check no traversal after normalization
+        if normalized.startswith("..") or os.path.isabs(normalized):
+            logger.warning("Rejecting unsafe normalized path: %s", normalized)
+            return None
+
+        return normalized
+
     def unzip(self, zip_path: Path, destination: Path) -> None:
-        """Extract zip_path into the destination directory."""
+        """
+        Extract zip_path into the destination directory with Zip Slip protection.
+        Only extracts members with safe, relative paths.
+        """
         logger.info("Attempting extraction of %s to %s", zip_path, destination)
+
+        # Ensure destination directory exists
+        destination.mkdir(parents=True, exist_ok=True)
+
         try:
             with ZipFile(zip_path, "r") as archive:
                 file_list = archive.namelist()
@@ -42,12 +91,57 @@ class ZipService:
                     len(file_list),
                 )
 
-                archive.extractall(destination)
-                logger.info("Extraction completed successfully")
+                # Safe extraction with path validation
+                extracted_count = 0
+                skipped_count = 0
+
+                for member in archive.infolist():
+                    # Sanitize the member name
+                    safe_name = self._sanitize_archive_member(member.filename)
+                    if safe_name is None:
+                        skipped_count += 1
+                        continue
+
+                    # Compute the target path
+                    target_path = destination / safe_name
+
+                    # Verify it's within the destination (double-check)
+                    if not self._is_safe_path(destination, target_path):
+                        logger.warning(
+                            "Rejecting path that escapes destination: %s",
+                            member.filename,
+                        )
+                        skipped_count += 1
+                        continue
+
+                    # Extract the member
+                    if member.is_dir():
+                        target_path.mkdir(parents=True, exist_ok=True)
+                    else:
+                        # Ensure parent directory exists
+                        target_path.parent.mkdir(parents=True, exist_ok=True)
+
+                        # Extract file content
+                        with archive.open(member) as source:
+                            content = source.read()
+                            target_path.write_bytes(content)
+
+                    extracted_count += 1
+
+                logger.info(
+                    "Extraction completed: %d files extracted, %d skipped",
+                    extracted_count,
+                    skipped_count,
+                )
+
+                if skipped_count > 0:
+                    logger.warning(
+                        "%d files were skipped due to unsafe paths", skipped_count
+                    )
 
                 dirs = [n for n in file_list if n.endswith("/")]
                 if dirs:
-                    logger.info(
+                    logger.debug(
                         "Zip contains %d directories: %s",
                         len(dirs),
                         dirs[:5],

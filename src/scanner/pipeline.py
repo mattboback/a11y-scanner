@@ -62,27 +62,32 @@ class Pipeline:
             # Step 3: Start the server
             self.http_service.start(directory=self.settings.scan_dir)
 
-            # Step 4: Scan each file
-            for file_info in html_files:
-                relative_path = file_info["relative"]
-                url_to_scan = f"{self.http_service.base_url}/{relative_path}"
+            # Step 4: Scan each file with a reusable browser
+            with self.axe_service:
+                for file_info in html_files:
+                    relative_path = file_info["relative"]
+                    url_to_scan = f"{self.http_service.base_url}/{relative_path}"
 
-                # Define a unique path for the full report artifact
-                report_filename = f"{relative_path.as_posix().replace('/', '_')}.json"
-                report_path = self.settings.results_dir / report_filename
+                    # Define a unique path for the full report artifact
+                    report_filename = (
+                        f"{relative_path.as_posix().replace('/', '_')}.json"
+                    )
+                    report_path = self.settings.results_dir / report_filename
 
-                try:
-                    # The new service directly returns the violations
-                    violations = self.axe_service.scan_url(url_to_scan, report_path)
-                    if violations:
-                        # Add context to each violation for better reporting
-                        for violation in violations:
-                            violation["scanned_url"] = url_to_scan
-                            violation["source_file"] = str(relative_path)
-                        all_results.extend(violations)
-                except RuntimeError as e:
-                    log.error("Failed to scan %s: %s", url_to_scan, e)
-                    continue  # Continue to the next file
+                    try:
+                        # The new service directly returns the violations
+                        violations = self.axe_service.scan_url(
+                            url_to_scan, report_path, source_file=str(relative_path)
+                        )
+                        if violations:
+                            # Add context to each violation for better reporting
+                            for violation in violations:
+                                violation["scanned_url"] = url_to_scan
+                                violation["source_file"] = str(relative_path)
+                            all_results.extend(violations)
+                    except RuntimeError as e:
+                        log.error("Failed to scan %s: %s", url_to_scan, e)
+                        continue  # Continue to the next file
 
             log.info("Pipeline execution completed successfully.")
             return all_results

@@ -101,8 +101,19 @@ class ContainerManager:
             return (None, None)
 
     def _prepare_host_dirs(self) -> None:
-        """Ensure host 'data' directory exists before binding it into the container."""
+        """
+        Ensure host 'data' directory exists before binding it into the container.
+        Sets permissive permissions to handle rootless Podman UID mapping.
+        """
         self.data_dir.mkdir(parents=True, exist_ok=True)
+        # Set 777 on data subdirectories for rootless container compatibility
+        for subdir in ["scan", "results", "reports", "unzip", "live_results"]:
+            path = self.data_dir / subdir
+            path.mkdir(parents=True, exist_ok=True)
+            try:
+                path.chmod(0o777)
+            except Exception:
+                pass  # Best effort, continue if chmod fails
 
     def ensure_image(self) -> None:
         self.ensure_base_image()
