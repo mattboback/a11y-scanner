@@ -13,7 +13,7 @@ We release patches for security vulnerabilities in the following versions:
 
 **Please do not report security vulnerabilities through public GitHub issues.**
 
-Instead, please report them via email to: **security@[yourdomain].com**
+Instead, please report them via email to: **matthewboback@gmail.com**
 
 You should receive a response within 48 hours. If for some reason you do not, please follow up via email to ensure we received your original message.
 
@@ -173,10 +173,10 @@ We recognize security researchers who responsibly disclose vulnerabilities:
 
 ## Contact
 
-For security concerns: security@[yourdomain].com
+For security concerns: matthewboback@gmail.com
 
-For general questions: See [GitHub Discussions](https://github.com/yourusername/a11y-scanner/discussions)
+For general questions: See [GitHub Discussions](https://github.com/mattboback/a11y-scanner/discussions)
 
 ---
 
-**Note**: This security policy is subject to change. Last updated: 2025-01-XX
+**Note**: This security policy is subject to change. Last updated: 2025-10-29

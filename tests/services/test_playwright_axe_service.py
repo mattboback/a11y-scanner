@@ -1,8 +1,6 @@
-import tempfile
 from pathlib import Path
 
 import pytest
-from pyfakefs.fake_filesystem_unittest import Patcher
 
 from scanner.services.http_service import HttpService
 from scanner.services.playwright_axe_service import PlaywrightAxeService

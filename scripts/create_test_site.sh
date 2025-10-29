@@ -1,33 +1,57 @@
 #!/usr/bin/env bash
-set -euo pipefail
+# Script to create a sample test site for scanning
 
-ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")"/.. && pwd)"
-UNZIP_DIR="$ROOT_DIR/data/unzip"
-TMP_DIR="$UNZIP_DIR/site_tmp"
-ZIP_PATH="$UNZIP_DIR/site.zip"
+set -e
 
-mkdir -p "$TMP_DIR"
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+DATA_DIR="$PROJECT_ROOT/data"
+UNZIP_DIR="$DATA_DIR/unzip"
+SITE_DIR="$DATA_DIR/site_tmp"
 
-cat >"$TMP_DIR/index.html" <<'HTML'
+echo "Creating test site..."
+
+# Create directories
+mkdir -p "$UNZIP_DIR"
+mkdir -p "$SITE_DIR"
+
+# Create sample HTML with accessibility issues
+cat > "$SITE_DIR/index.html" <<'EOF'
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Sample A11y Site</title>
-    <style>
-      .low-contrast-text { color: #999; background: #888; }
-    </style>
-  </head>
-  <body>
-    <h1>Sample Page</h1>
-    <img src="logo.png">
-    <p class="low-contrast-text">Low contrast text</p>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <title>Sample Test Site</title>
+  <style>
+    .low-contrast { color: #999; background: #f0f0f0; }
+  </style>
+</head>
+<body>
+  <h1>Sample Page</h1>
+  <img src="logo.png">
+  <p class="low-contrast">Low contrast text</p>
+  <button>Click me</button>
+</body>
 </html>
-HTML
+EOF
 
-echo "Zipping sample site to $ZIP_PATH"
-rm -f "$ZIP_PATH"
-(cd "$TMP_DIR" && zip -r "$ZIP_PATH" . >/dev/null)
+cat > "$SITE_DIR/about.html" <<'EOF'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>About Page</title>
+</head>
+<body>
+  <h1>About</h1>
+  <img src="team.jpg">
+  <p>Information about us</p>
+</body>
+</html>
+EOF
 
-echo "✅ Created $ZIP_PATH"
+# Create ZIP file
+cd "$SITE_DIR"
+zip -r "$UNZIP_DIR/site.zip" . -q
+
+echo "✓ Created: $UNZIP_DIR/site.zip"
+echo "✓ Test site ready for scanning"

@@ -106,7 +106,7 @@ make integration
 
 **Reporting tests**:
 ```bash
-./scripts/test_reporting.sh
+pytest tests/test_reporting.py -v
 # or
 make test-reporting
 ```
@@ -237,7 +237,11 @@ Required for:
 
 Update golden files if output format changes:
 ```bash
-./scripts/update_golden_files.sh
+# Run integration tests to generate new results
+python -m scanner.container.integration
+
+# Manually review and update golden files in:
+# tests/assets/html_sets/*/golden_results/
 ```
 
 ### Test Coverage
@@ -370,7 +374,7 @@ Add screenshots of report changes or UI updates
 
 ### Before Reporting
 
-1. Check [existing issues](https://github.com/yourusername/a11y-scanner/issues)
+1. Check [existing issues](https://github.com/mattboback/a11y-scanner/issues)
 2. Try the latest version of main
 3. Review the [troubleshooting guide](README.md#troubleshooting)
 
@@ -390,7 +394,7 @@ Include:
 ### Before Suggesting
 
 1. Check if the feature already exists
-2. Check [existing feature requests](https://github.com/yourusername/a11y-scanner/issues?q=is%3Aissue+label%3Aenhancement)
+2. Check [existing feature requests](https://github.com/mattboback/a11y-scanner/issues?q=is%3Aissue+label%3Aenhancement)
 3. Consider if it fits the project scope
 
 ### Enhancement Request Template
@@ -405,9 +409,9 @@ Include:
 
 ## Questions?
 
-- Open a [GitHub Discussion](https://github.com/yourusername/a11y-scanner/discussions)
+- Open a [GitHub Discussion](https://github.com/mattboback/a11y-scanner/discussions)
 - Check the [documentation](docs/)
-- Review [existing issues](https://github.com/yourusername/a11y-scanner/issues)
+- Review [existing issues](https://github.com/mattboback/a11y-scanner/issues)
 
 ## Recognition
 

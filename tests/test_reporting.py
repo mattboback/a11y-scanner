@@ -1,12 +1,16 @@
 import json
 import tempfile
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 import pytest
 
-from scanner.reporting.jinja_report import (Occurrence, ReportModel, RuleGroup,
-                                            build_report, validate_report_json)
+from scanner.reporting.jinja_report import (
+    Occurrence,
+    ReportModel,
+    RuleGroup,
+    build_report,
+    validate_report_json,
+)
 
 
 @pytest.fixture
