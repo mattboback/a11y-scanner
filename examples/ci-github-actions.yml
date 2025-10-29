@@ -1,0 +1,149 @@
+name: Accessibility Scan
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run weekly on Mondays at 9 AM UTC
+    - cron: '0 9 * * 1'
+
+jobs:
+  a11y-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install a11y-scanner
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install a11y-scanner
+
+      # Example: Build your static site
+      - name: Build site
+        run: |
+          npm ci
+          npm run build
+          # Adjust these commands for your project
+
+      - name: Package site for scanning
+        run: |
+          mkdir -p data/unzip
+          cd dist && zip -r ../data/unzip/site.zip .
+
+      - name: Prepare Docker image
+        run: |
+          source .venv/bin/activate
+          python -m scanner.container.runner prepare
+
+      - name: Run accessibility scan
+        id: scan
+        run: |
+          source .venv/bin/activate
+          python -m scanner.container.runner run
+        continue-on-error: true
+
+      - name: Count violations
+        id: count
+        run: |
+          # Count total violations across all pages
+          total=$(jq -s 'map(.violations | length) | add // 0' data/results/*.json)
+          echo "total_violations=$total" >> $GITHUB_OUTPUT
+          echo "Found $total accessibility violations"
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-report
+          path: data/reports/latest.html
+          retention-days: 30
+
+      - name: Upload JSON results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-results
+          path: data/results/*.json
+          retention-days: 30
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-screenshots
+          path: data/results/*.png
+          retention-days: 30
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const violations = '${{ steps.count.outputs.total_violations }}';
+            const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+
+            let body = `## Accessibility Scan Results\n\n`;
+
+            if (violations === '0') {
+              body += `✅ **No accessibility violations found!**\n\n`;
+            } else {
+              body += `⚠️ **Found ${violations} accessibility violation(s)**\n\n`;
+            }
+
+            body += `📊 [View detailed report](${runUrl})\n\n`;
+            body += `The full HTML report is available in the workflow artifacts.`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Fail on violations
+        if: steps.count.outputs.total_violations > 0
+        run: |
+          echo "::error::Found ${{ steps.count.outputs.total_violations }} accessibility violations"
+          echo "Review the HTML report in artifacts for details"
+          exit 1
+
+  # Optional: Generate and deploy report to GitHub Pages
+  deploy-report:
+    runs-on: ubuntu-latest
+    needs: a11y-scan
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Download report
+        uses: actions/download-artifact@v4
+        with:
+          name: accessibility-report
+          path: public
+
+      - name: Download results
+        uses: actions/download-artifact@v4
+        with:
+          name: accessibility-results
+          path: public/results
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          destination_dir: accessibility-reports

@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/playwright:v1.54.0-jammy
+
+FROM mcr.microsoft.com/playwright/python:v1.54.0-jammy
 
 ENV VIRTUAL_ENV=/home/pwuser/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
@@ -10,7 +11,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 USER pwuser
-
 WORKDIR /home/pwuser
 
 RUN python3 -m venv $VIRTUAL_ENV

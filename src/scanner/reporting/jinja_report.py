@@ -7,7 +7,6 @@ import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
 
 from jinja2 import (
     ChoiceLoader,
@@ -60,7 +59,7 @@ class RuleGroup:
 
     count: int = 0
 
-    occurrences: List[Occurrence] = field(default_factory=list)
+    occurrences: list[Occurrence] = field(default_factory=list)
 
     @property
     def impact_class(self) -> str:
@@ -82,9 +81,9 @@ class ReportModel:
 
     total_violations: int
 
-    by_rule: List[RuleGroup]
+    by_rule: list[RuleGroup]
 
-    raw_files: List[str]
+    raw_files: list[str]
 
     def validate(self) -> bool:
         """Validate the report model has reasonable values"""
@@ -127,7 +126,7 @@ def _iter_reports(results_dir: Path):
             continue
 
 
-def _impact_sort_key(impact: Optional[str], rule_id: str) -> tuple:
+def _impact_sort_key(impact: str | None, rule_id: str) -> tuple:
     """Sort key for rule groups: critical > serious > moderate > minor > unknown"""
 
     impact_order = {
@@ -145,13 +144,13 @@ def _impact_sort_key(impact: Optional[str], rule_id: str) -> tuple:
 def _build_model(results_dir: Path, title: str) -> ReportModel:
     """Build the report model from JSON files in the results directory"""
 
-    groups: Dict[str, RuleGroup] = {}
+    groups: dict[str, RuleGroup] = {}
 
     pages_scanned = 0
 
     total_violations = 0
 
-    raw_files: List[str] = []
+    raw_files: list[str] = []
 
     for fname, report in _iter_reports(results_dir):
         raw_files.append(fname)
@@ -381,7 +380,7 @@ def validate_report_json(json_path: Path) -> bool:
     """Validate that a JSON file has the expected structure for reporting"""
 
     try:
-        with open(json_path, "r", encoding="utf-8") as f:
+        with open(json_path, encoding="utf-8") as f:
             data = json.load(f)
 
         # Check for required fields

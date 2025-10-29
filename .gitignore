@@ -156,3 +156,30 @@ dist/
 # Editors/IDEs
 .vscode/
 .idea/
+
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Test & coverage
+htmlcov/
+.coverage
+.pytest_cache/
+
+# Local data artifacts (reports, results, zips, screenshots)
+data/
+test_data/
+logs/
+
+# Docker/Podman
+*.pid
+*.log

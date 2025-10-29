@@ -1,0 +1,70 @@
+
+services:
+  # Main API service
+  a11y-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: a11y-scanner-api
+    ports:
+      - "8008:8008"
+    volumes:
+      # Persistent data storage
+      - a11y-data:/worksrc/data
+      # Optional: Mount source for development
+      # - ../src:/worksrc/src:ro
+    environment:
+      - A11Y_SCANNER_IN_CONTAINER=1
+      - A11Y_API_TOKEN=${A11Y_API_TOKEN:-changeme123}
+      - PYTHONUNBUFFERED=1
+    command: python -m scanner.web.server
+    restart: unless-stopped
+    shm_size: '2gb'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8008/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - a11y-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.a11y.rule=Host(`scanner.example.com`)"
+      - "traefik.http.services.a11y.loadbalancer.server.port=8008"
+
+  # Optional: Reverse proxy with HTTPS
+  nginx:
+    image: nginx:alpine
+    container_name: a11y-nginx
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - a11y-api
+    networks:
+      - a11y-network
+    restart: unless-stopped
+
+volumes:
+  a11y-data:
+    driver: local
+
+networks:
+  a11y-network:
+    driver: bridge
+
+# Usage:
+# 1. Copy this file to your project root
+# 2. Set environment variable:
+#    export A11Y_API_TOKEN=$(openssl rand -base64 32)
+# 3. Start services:
+#    docker-compose -f examples/docker-compose-api.yml up -d
+# 4. Access API at http://localhost:8008
+# 5. View logs:
+#    docker-compose -f examples/docker-compose-api.yml logs -f
+# 6. Stop services:
+#    docker-compose -f examples/docker-compose-api.yml down

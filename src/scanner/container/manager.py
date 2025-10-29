@@ -6,7 +6,6 @@ import platform
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
 import docker
 
@@ -17,7 +16,7 @@ IN_CONTAINER_ENV = "A11Y_SCANNER_IN_CONTAINER"
 IN_CONTAINER_VALUE = "1"
 
 
-def find_project_root(start: Optional[Path] = None) -> Path:
+def find_project_root(start: Path | None = None) -> Path:
     """
     Locate the project root by searching upwards for pyproject.toml.
     Falls back to the current working directory if not found.
@@ -142,7 +141,7 @@ class ContainerManager:
 
     # ---------- cache key / image name ----------
 
-    def _hash_file(self, path: Path, h: "hashlib._Hash") -> None:
+    def _hash_file(self, path: Path, h: hashlib._Hash) -> None:
         with open(path, "rb") as fh:
             for chunk in iter(lambda: fh.read(1024 * 1024), b""):
                 h.update(chunk)
