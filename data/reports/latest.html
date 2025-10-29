@@ -1,172 +1,450 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Accessibility Report (Live URLs)</title>
+  <title>Accessibility Report</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --bg: #0f172a;          /* slate-900 */
-      --panel: #111827;       /* gray-900 */
-      --card: #0b1220;        /* deep panel */
-      --text: #e5e7eb;        /* gray-200 */
-      --muted: #9ca3af;       /* gray-400 */
-      --accent: #93c5fd;      /* blue-300 */
-      --ok: #34d399;          /* emerald-400 */
-      --warn: #fbbf24;        /* amber-400 */
-      --bad: #f87171;         /* red-400 */
-      --minor: #fcd34d;       /* amber-300 */
-      --border: #1f2937;      /* gray-800 */
-      --chip: #111827;
-      --link: #93c5fd;
-      --code-bg: #0b1320;
-      --code-border: #1e293b;
+      --bg: #0a0e1a;
+      --bg-gradient: radial-gradient(ellipse 1400px 900px at 50% 0%, #0f1828 0%, #0a0e1a 60%);
+      --panel: #0f1419;
+      --card: #0d1117;
+      --card-hover: #161b22;
+      --text: #e6edf3;
+      --text-secondary: #7d8590;
+      --text-muted: #6e7681;
+      --accent: #58a6ff;
+      --accent-muted: #1f6feb;
+      --ok: #3fb950;
+      --warn: #d29922;
+      --bad: #f85149;
+      --critical: #ff4444;
+      --serious: #ff8c00;
+      --moderate: #ffa500;
+      --minor: #ffd700;
+      --border: #21262d;
+      --border-muted: #30363d;
+      --code-bg: #0d1117;
+      --code-border: #21262d;
+      --shadow: rgba(1,4,9,0.5);
     }
-    * { box-sizing: border-box; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      margin: 0; padding: 2rem;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji;
-      background: radial-gradient(1200px 800px at 10% 10%, #0b1320 0, #0f172a 50%, #0b1220 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
       color: var(--text);
+      line-height: 1.6;
+      padding: 1.5rem;
+      min-height: 100vh;
     }
-    a { color: var(--link); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .container { max-width: 1100px; margin: 0 auto; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
     header {
+      background: var(--card);
       border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(17,24,39,.7), rgba(11,19,32,.6));
-      backdrop-filter: blur(6px);
-      border-radius: 16px;
-      padding: 1.25rem 1.25rem 1rem;
-      margin-bottom: 1.25rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 32px var(--shadow);
+      position: sticky;
+      top: 1rem;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(13, 17, 23, 0.95);
     }
-    header h1 {
-      margin: 0 0 .25rem 0;
-      font-size: 1.5rem;
-      letter-spacing: .25px;
-    }
-    header .meta { color: var(--muted); font-size: .9rem; }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+      letter-spacing: -0.03em;
+    }
+
+    .meta {
+      color: var(--text-muted);
+      font-size: 0.875rem;
     }
 
     .card {
+      background: var(--card);
       border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(12,18,31,.75), rgba(9,14,24,.8));
-      border-radius: 16px;
-      padding: 1rem;
-      box-shadow: 0 10px 24px rgba(0,0,0,.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px var(--shadow);
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
     }
 
     .summary {
       display: grid;
-      grid-template-columns: repeat(3, minmax(160px, 1fr));
-      gap: .75rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
     }
+
     .kpi {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: .9rem;
+      background: var(--panel);
+      border: 1px solid var(--border-muted);
+      border-radius: 10px;
+      padding: 1.25rem;
+      transition: all 0.2s ease;
     }
-    .kpi .label { color: var(--muted); font-size: .85rem; margin-bottom: .35rem; }
-    .kpi .value { font-size: 1.4rem; font-weight: 700; }
+
+    .kpi:hover {
+      border-color: var(--accent-muted);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(88, 166, 255, 0.1);
+    }
+
+    .kpi .label {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .kpi .value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1;
+    }
 
     .status-ok { color: var(--ok); }
     .status-warn { color: var(--warn); }
     .status-bad { color: var(--bad); }
 
-    .section-title {
-      font-size: 1.1rem;
-      margin: .2rem 0 .8rem 0;
-      color: var(--accent);
+    .raw-files {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .raw-files-title {
+      font-size: 0.875rem;
       font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
-    .rules { display: grid; grid-template-columns: 1fr; gap: .9rem; }
+    .raw-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .raw-list a {
+      display: inline-flex;
+      align-items: center;
+      background: var(--panel);
+      border: 1px solid var(--border-muted);
+      color: var(--accent);
+      padding: 0.375rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .raw-list a:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+    }
+
+    .rules {
+      display: grid;
+      gap: 1.25rem;
+    }
+
     .rule {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--card);
-      padding: .9rem;
-    }
-    .rule-header {
-      display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap;
-      margin-bottom: .5rem;
-    }
-    .rule-id { font-weight: 700; }
-    .chip {
-      display: inline-flex; align-items: center; gap: .35rem;
-      font-size: .75rem; padding: .15rem .5rem;
-      border-radius: 999px; border: 1px solid var(--border); background: var(--chip);
-      color: var(--muted);
-    }
-    .impact-critical .chip-impact { color: var(--bad); border-color: rgba(248,113,113,.35); }
-    .impact-serious .chip-impact  { color: var(--warn); border-color: rgba(251,191,36,.35); }
-    .impact-moderate .chip-impact { color: var(--minor); border-color: rgba(252,211,77,.35); }
-    .impact-minor .chip-impact    { color: var(--muted); }
-    .impact-unknown .chip-impact  { color: var(--muted); }
-
-    .rule-desc { color: var(--muted); margin: .25rem 0 .75rem 0; }
-    .occ-list { display: grid; grid-template-columns: 1fr; gap: .6rem; }
-    .occ {
-      border: 1px dashed var(--border);
+      background: var(--panel);
+      border: 2px solid var(--border);
       border-radius: 10px;
-      padding: .65rem .75rem;
-      background: linear-gradient(180deg, rgba(16,25,41,.35), rgba(12,18,31,.35));
+      padding: 1.5rem;
+      transition: all 0.2s ease;
     }
-    .occ .row { display:flex; gap: .5rem; flex-wrap: wrap; }
-    .occ .kv { color: var(--muted); font-size: .85rem; }
-    .occ .kv b { color: var(--text); font-weight: 600; }
-    .occ code, pre {
+
+    .rule:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .impact-critical {
+      border-left: 4px solid var(--critical);
+    }
+
+    .impact-serious {
+      border-left: 4px solid var(--serious);
+    }
+
+    .impact-moderate {
+      border-left: 4px solid var(--moderate);
+    }
+
+    .impact-minor {
+      border-left: 4px solid var(--minor);
+    }
+
+    .rule-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .rule-id {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-impact {
+      background: rgba(248, 113, 113, 0.15);
+      color: var(--bad);
+      border: 1px solid rgba(248, 113, 113, 0.3);
+    }
+
+    .impact-critical .badge-impact {
+      background: rgba(255, 68, 68, 0.15);
+      color: var(--critical);
+      border: 1px solid rgba(255, 68, 68, 0.4);
+    }
+
+    .impact-serious .badge-impact {
+      background: rgba(255, 140, 0, 0.15);
+      color: var(--serious);
+      border: 1px solid rgba(255, 140, 0, 0.3);
+    }
+
+    .impact-moderate .badge-impact {
+      background: rgba(255, 165, 0, 0.15);
+      color: var(--moderate);
+      border: 1px solid rgba(255, 165, 0, 0.3);
+    }
+
+    .impact-minor .badge-impact {
+      background: rgba(255, 215, 0, 0.15);
+      color: var(--minor);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .badge-count {
+      background: rgba(88, 166, 255, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(88, 166, 255, 0.3);
+    }
+
+    .badge-link {
+      background: rgba(88, 166, 255, 0.1);
+      color: var(--accent);
+      border: 1px solid var(--border-muted);
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .badge-link:hover {
+      background: rgba(88, 166, 255, 0.2);
+      border-color: var(--accent);
+    }
+
+    .rule-desc {
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    .occ-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .occ {
+      background: var(--card);
+      border: 1px solid var(--border-muted);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .occ-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .occ-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      font-size: 0.875rem;
+    }
+
+    .occ-label {
+      color: var(--text-muted);
+      font-weight: 600;
+      min-width: 70px;
+    }
+
+    .occ-value {
+      color: var(--text);
+    }
+
+    .occ-value a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .occ-value a:hover {
+      text-decoration: underline;
+    }
+
+    .occ-value code {
       background: var(--code-bg);
       border: 1px solid var(--code-border);
-      padding: .35rem .5rem;
-      border-radius: 6px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: .85rem;
-      overflow-x: auto;
-      color: #d1e9ff;
-    }
-    .occ .shot {
-      margin-top: .5rem;
-      border: 1px solid var(--border);
-      background: #0a0f1c;
-      border-radius: 8px;
-      padding: .35rem;
-      max-width: 520px;
-    }
-    .occ .shot img {
-      display:block; width:100%; height:auto; border-radius:6px;
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 0.8125rem;
+      color: #79c0ff;
     }
 
-    .raw-list { display: flex; flex-wrap: wrap; gap: .4rem; }
-    .raw-list a {
+    .snippet {
+      margin-top: 0.75rem;
+    }
+
+    .snippet-label {
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      margin-bottom: 0.375rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 6px;
+      padding: 0.75rem;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    pre code {
+      color: #e6edf3;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .screenshot {
+      margin-top: 1rem;
+      background: var(--code-bg);
+      border: 1px solid var(--border-muted);
+      border-radius: 8px;
+      padding: 0.75rem;
+    }
+
+    .screenshot-label {
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .screenshot img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
       border: 1px solid var(--border);
-      background: var(--chip);
-      color: var(--text);
-      padding: .25rem .5rem;
-      border-radius: 999px;
-      font-size: .8rem;
+      image-rendering: crisp-edges;
+      image-rendering: -webkit-optimize-contrast;
     }
 
     footer {
-      margin-top: 1.25rem; color: var(--muted); font-size: .85rem;
       text-align: center;
+      padding: 2rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      header {
+        padding: 1.5rem;
+        position: static;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .summary {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi .value {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <header class="card">
-      <h1>Accessibility Report (Live URLs)</h1>
-      <div class="meta">Generated at: 2025-10-15 00:18:31Z</div>
+    <header>
+      <h1>Accessibility Report</h1>
+      <div class="meta">Generated 2025-10-29 21:16:59Z</div>
     </header>
 
     <section class="card">
@@ -174,28 +452,331 @@
       <div class="summary">
         <div class="kpi">
           <div class="label">Pages Scanned</div>
-          <div class="value">0</div>
+          <div class="value">2</div>
         </div>
         <div class="kpi">
           <div class="label">Total Violations</div>
-          <div class="value status-ok">
-            0
+          <div class="value status-warn">
+            9
           </div>
         </div>
         <div class="kpi">
           <div class="label">Raw Artifacts</div>
-          <div class="value">0</div>
+          <div class="value">2</div>
+        </div>
+      </div>
+
+      <div class="raw-files">
+        <div class="raw-files-title">Raw JSON Reports</div>
+        <div class="raw-list">
+          <a href="../results/Flat-1.0.0___MACOSX_template-free-lite_._index.html.json" target="_blank" rel="noopener">Flat-1.0.0___MACOSX_template-free-lite_._index.html.json</a>
+          <a href="../results/Flat-1.0.0_index.html.json" target="_blank" rel="noopener">Flat-1.0.0_index.html.json</a>
         </div>
       </div>
     </section>
 
-      <section class="card">
-        <div class="section-title">Details</div>
-        <p class="rule-desc">No accessibility violations were found.</p>
-      </section>
+    <section class="card">
+      <div class="section-title">Violations by Rule (6 rules)</div>
+      <div class="rules">
+        <article class="rule impact-serious">
+          <div class="rule-header">
+            <span class="rule-id">color-contrast</span>
+            <span class="badge badge-impact">serious</span>
+            <span class="badge badge-count">1 occurrence</span>
+            <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/color-contrast?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
+          </div>
+
+          <div class="rule-desc">Ensures the contrast between foreground and background colors meets WCAG 2 AA contrast ratio thresholds</div>
+
+          <div class="occ-list">
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      Flat-1.0.0/index.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>a[href$="#home"]</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;a class=&#34;page-scroll active&#34; href=&#34;#home&#34;&gt;Home&lt;/a&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-color-contrast-fe36e1fe-17d3-4c98-83ed-c68ee815c1e4.png" alt="Screenshot showing color-contrast violation" loading="lazy">
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="rule impact-serious">
+          <div class="rule-header">
+            <span class="rule-id">document-title</span>
+            <span class="badge badge-impact">serious</span>
+            <span class="badge badge-count">1 occurrence</span>
+            <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/document-title?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
+          </div>
+
+          <div class="rule-desc">Ensures each HTML document contains a non-empty <title> element</div>
+
+          <div class="occ-list">
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      Flat-1.0.0/__MACOSX/template-free-lite/._index.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>html</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Mac OS X        	2~°ATTR°&amp;nbsp;&amp;nbsp;com.apple.lastuseddate#PS“Ï_—IŸ&lt;/body&gt;&lt;/html&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-document-title-d416ae8a-45e8-4733-8d5b-071955a400df.png" alt="Screenshot showing document-title violation" loading="lazy">
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="rule impact-serious">
+          <div class="rule-header">
+            <span class="rule-id">html-has-lang</span>
+            <span class="badge badge-impact">serious</span>
+            <span class="badge badge-count">2 occurrences</span>
+            <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/html-has-lang?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
+          </div>
+
+          <div class="rule-desc">Ensures every HTML document has a lang attribute</div>
+
+          <div class="occ-list">
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      Flat-1.0.0/__MACOSX/template-free-lite/._index.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>html</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Mac OS X        	2~°ATTR°&amp;nbsp;&amp;nbsp;com.apple.lastuseddate#PS“Ï_—IŸ&lt;/body&gt;&lt;/html&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-html-has-lang-f8921d99-0330-4d05-9c2c-1e82ef9b0de6.png" alt="Screenshot showing html-has-lang violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      Flat-1.0.0/index.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>html</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;html class=&#34;no-js&#34; lang=&#34;&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-html-has-lang-3718d894-18e9-4c7a-aeca-7920d7038050.png" alt="Screenshot showing html-has-lang violation" loading="lazy">
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="rule impact-moderate">
+          <div class="rule-header">
+            <span class="rule-id">landmark-one-main</span>
+            <span class="badge badge-impact">moderate</span>
+            <span class="badge badge-count">2 occurrences</span>
+            <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/landmark-one-main?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
+          </div>
+
+          <div class="rule-desc">Ensures the document has a main landmark</div>
+
+          <div class="occ-list">
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      Flat-1.0.0/__MACOSX/template-free-lite/._index.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>html</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Mac OS X        	2~°ATTR°&amp;nbsp;&amp;nbsp;com.apple.lastuseddate#PS“Ï_—IŸ&lt;/body&gt;&lt;/html&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-landmark-one-main-8bdf65db-3bdd-475b-89b4-144b45483e7c.png" alt="Screenshot showing landmark-one-main violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      Flat-1.0.0/index.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>html</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;html class=&#34;no-js&#34; lang=&#34;&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-landmark-one-main-0422bf3c-7ae5-473e-bb76-e1278bc8b0fd.png" alt="Screenshot showing landmark-one-main violation" loading="lazy">
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="rule impact-moderate">
+          <div class="rule-header">
+            <span class="rule-id">page-has-heading-one</span>
+            <span class="badge badge-impact">moderate</span>
+            <span class="badge badge-count">2 occurrences</span>
+            <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/page-has-heading-one?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
+          </div>
+
+          <div class="rule-desc">Ensure that the page, or at least one of its frames contains a level-one heading</div>
+
+          <div class="occ-list">
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      Flat-1.0.0/__MACOSX/template-free-lite/._index.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>html</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Mac OS X        	2~°ATTR°&amp;nbsp;&amp;nbsp;com.apple.lastuseddate#PS“Ï_—IŸ&lt;/body&gt;&lt;/html&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-page-has-heading-one-15e57168-266a-4210-a279-21c1d38e19dc.png" alt="Screenshot showing page-has-heading-one violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      Flat-1.0.0/index.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>html</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;html class=&#34;no-js&#34; lang=&#34;&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-page-has-heading-one-6bd69713-c932-4790-a028-f0a97a9e5ebb.png" alt="Screenshot showing page-has-heading-one violation" loading="lazy">
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="rule impact-moderate">
+          <div class="rule-header">
+            <span class="rule-id">region</span>
+            <span class="badge badge-impact">moderate</span>
+            <span class="badge badge-count">1 occurrence</span>
+            <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/region?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
+          </div>
+
+          <div class="rule-desc">Ensures all page content is contained by landmarks</div>
+
+          <div class="occ-list">
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      Flat-1.0.0/index.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>.hero-section</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;div class=&#34;hero-section hero-style-2&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-region-09f917ef-856b-465d-bc47-19d308f105e6.png" alt="Screenshot showing region violation" loading="lazy">
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
 
     <footer>
-      a11y-scanner • Report generated by axe-core + Playwright • 2025-10-15 00:18:31Z
+      <strong>a11y-scanner</strong> • Powered by <a href="https://github.com/dequelabs/axe-core" target="_blank" rel="noopener">axe-core</a> + <a href="https://playwright.dev" target="_blank" rel="noopener">Playwright</a>
     </footer>
   </div>
 </body>

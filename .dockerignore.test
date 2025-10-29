@@ -1,0 +1,67 @@
+# --- Git ---
+.git/
+.gitignore
+.gitattributes
+
+# --- Docker ---
+.dockerignore
+Dockerfile*
+docker-compose*.yml
+
+# --- Python Virtual Environments ---
+env/
+venv/
+.venv/
+ENV/
+
+# --- Python Cache / Build Artifacts ---
+__pycache__/
+*.py[cod]
+build/
+dist/
+*.egg-info/
+wheels/
+.installed.cfg
+*.egg
+
+# --- Test artifacts / cache ---
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+
+# --- Project Specific ---
+
+# Local environment configuration
+.env*
+!.env.example
+
+# Data directory - Mount via volume at runtime
+data/
+
+# Log files
+*.log
+logs/
+
+# --- IDE / Editor / OS ---
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+*.bak
+*.swp
+*~
+
+# Project specific
+websiteToTest
+data_parse
+
+# Playwright/Reports
+playwright-report
+test-results
+
+# NOTE: tests/ is NOT excluded for test images
