@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,166 +6,445 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --bg: #0f172a;          /* slate-900 */
-      --panel: #111827;       /* gray-900 */
-      --card: #0b1220;        /* deep panel */
-      --text: #e5e7eb;        /* gray-200 */
-      --muted: #9ca3af;       /* gray-400 */
-      --accent: #93c5fd;      /* blue-300 */
-      --ok: #34d399;          /* emerald-400 */
-      --warn: #fbbf24;        /* amber-400 */
-      --bad: #f87171;         /* red-400 */
-      --minor: #fcd34d;       /* amber-300 */
-      --border: #1f2937;      /* gray-800 */
-      --chip: #111827;
-      --link: #93c5fd;
-      --code-bg: #0b1320;
-      --code-border: #1e293b;
+      --bg: #0a0e1a;
+      --bg-gradient: radial-gradient(ellipse 1400px 900px at 50% 0%, #0f1828 0%, #0a0e1a 60%);
+      --panel: #0f1419;
+      --card: #0d1117;
+      --card-hover: #161b22;
+      --text: #e6edf3;
+      --text-secondary: #7d8590;
+      --text-muted: #6e7681;
+      --accent: #58a6ff;
+      --accent-muted: #1f6feb;
+      --ok: #3fb950;
+      --warn: #d29922;
+      --bad: #f85149;
+      --critical: #ff4444;
+      --serious: #ff8c00;
+      --moderate: #ffa500;
+      --minor: #ffd700;
+      --border: #21262d;
+      --border-muted: #30363d;
+      --code-bg: #0d1117;
+      --code-border: #21262d;
+      --shadow: rgba(1,4,9,0.5);
     }
-    * { box-sizing: border-box; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      margin: 0; padding: 2rem;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji;
-      background: radial-gradient(1200px 800px at 10% 10%, #0b1320 0, #0f172a 50%, #0b1220 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
       color: var(--text);
+      line-height: 1.6;
+      padding: 1.5rem;
+      min-height: 100vh;
     }
-    a { color: var(--link); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .container { max-width: 1100px; margin: 0 auto; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
     header {
+      background: var(--card);
       border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(17,24,39,.7), rgba(11,19,32,.6));
-      backdrop-filter: blur(6px);
-      border-radius: 16px;
-      padding: 1.25rem 1.25rem 1rem;
-      margin-bottom: 1.25rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 32px var(--shadow);
+      position: sticky;
+      top: 1rem;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(13, 17, 23, 0.95);
     }
-    header h1 {
-      margin: 0 0 .25rem 0;
-      font-size: 1.5rem;
-      letter-spacing: .25px;
-    }
-    header .meta { color: var(--muted); font-size: .9rem; }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+      letter-spacing: -0.03em;
+    }
+
+    .meta {
+      color: var(--text-muted);
+      font-size: 0.875rem;
     }
 
     .card {
+      background: var(--card);
       border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(12,18,31,.75), rgba(9,14,24,.8));
-      border-radius: 16px;
-      padding: 1rem;
-      box-shadow: 0 10px 24px rgba(0,0,0,.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px var(--shadow);
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
     }
 
     .summary {
       display: grid;
-      grid-template-columns: repeat(3, minmax(160px, 1fr));
-      gap: .75rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
     }
+
     .kpi {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: .9rem;
+      background: var(--panel);
+      border: 1px solid var(--border-muted);
+      border-radius: 10px;
+      padding: 1.25rem;
+      transition: all 0.2s ease;
     }
-    .kpi .label { color: var(--muted); font-size: .85rem; margin-bottom: .35rem; }
-    .kpi .value { font-size: 1.4rem; font-weight: 700; }
+
+    .kpi:hover {
+      border-color: var(--accent-muted);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(88, 166, 255, 0.1);
+    }
+
+    .kpi .label {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .kpi .value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1;
+    }
 
     .status-ok { color: var(--ok); }
     .status-warn { color: var(--warn); }
     .status-bad { color: var(--bad); }
 
-    .section-title {
-      font-size: 1.1rem;
-      margin: .2rem 0 .8rem 0;
-      color: var(--accent);
+    .raw-files {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .raw-files-title {
+      font-size: 0.875rem;
       font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
-    .rules { display: grid; grid-template-columns: 1fr; gap: .9rem; }
+    .raw-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .raw-list a {
+      display: inline-flex;
+      align-items: center;
+      background: var(--panel);
+      border: 1px solid var(--border-muted);
+      color: var(--accent);
+      padding: 0.375rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .raw-list a:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+    }
+
+    .rules {
+      display: grid;
+      gap: 1.25rem;
+    }
+
     .rule {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--card);
-      padding: .9rem;
-    }
-    .rule-header {
-      display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap;
-      margin-bottom: .5rem;
-    }
-    .rule-id { font-weight: 700; }
-    .chip {
-      display: inline-flex; align-items: center; gap: .35rem;
-      font-size: .75rem; padding: .15rem .5rem;
-      border-radius: 999px; border: 1px solid var(--border); background: var(--chip);
-      color: var(--muted);
-    }
-    .impact-critical .chip-impact { color: var(--bad); border-color: rgba(248,113,113,.35); }
-    .impact-serious .chip-impact  { color: var(--warn); border-color: rgba(251,191,36,.35); }
-    .impact-moderate .chip-impact { color: var(--minor); border-color: rgba(252,211,77,.35); }
-    .impact-minor .chip-impact    { color: var(--muted); }
-    .impact-unknown .chip-impact  { color: var(--muted); }
-
-    .rule-desc { color: var(--muted); margin: .25rem 0 .75rem 0; }
-    .occ-list { display: grid; grid-template-columns: 1fr; gap: .6rem; }
-    .occ {
-      border: 1px dashed var(--border);
+      background: var(--panel);
+      border: 2px solid var(--border);
       border-radius: 10px;
-      padding: .65rem .75rem;
-      background: linear-gradient(180deg, rgba(16,25,41,.35), rgba(12,18,31,.35));
+      padding: 1.5rem;
+      transition: all 0.2s ease;
     }
-    .occ .row { display:flex; gap: .5rem; flex-wrap: wrap; }
-    .occ .kv { color: var(--muted); font-size: .85rem; }
-    .occ .kv b { color: var(--text); font-weight: 600; }
-    .occ code, pre {
+
+    .rule:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .impact-critical {
+      border-left: 4px solid var(--critical);
+    }
+
+    .impact-serious {
+      border-left: 4px solid var(--serious);
+    }
+
+    .impact-moderate {
+      border-left: 4px solid var(--moderate);
+    }
+
+    .impact-minor {
+      border-left: 4px solid var(--minor);
+    }
+
+    .rule-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .rule-id {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-impact {
+      background: rgba(248, 113, 113, 0.15);
+      color: var(--bad);
+      border: 1px solid rgba(248, 113, 113, 0.3);
+    }
+
+    .impact-critical .badge-impact {
+      background: rgba(255, 68, 68, 0.15);
+      color: var(--critical);
+      border: 1px solid rgba(255, 68, 68, 0.4);
+    }
+
+    .impact-serious .badge-impact {
+      background: rgba(255, 140, 0, 0.15);
+      color: var(--serious);
+      border: 1px solid rgba(255, 140, 0, 0.3);
+    }
+
+    .impact-moderate .badge-impact {
+      background: rgba(255, 165, 0, 0.15);
+      color: var(--moderate);
+      border: 1px solid rgba(255, 165, 0, 0.3);
+    }
+
+    .impact-minor .badge-impact {
+      background: rgba(255, 215, 0, 0.15);
+      color: var(--minor);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .badge-count {
+      background: rgba(88, 166, 255, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(88, 166, 255, 0.3);
+    }
+
+    .badge-link {
+      background: rgba(88, 166, 255, 0.1);
+      color: var(--accent);
+      border: 1px solid var(--border-muted);
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .badge-link:hover {
+      background: rgba(88, 166, 255, 0.2);
+      border-color: var(--accent);
+    }
+
+    .rule-desc {
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    .occ-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .occ {
+      background: var(--card);
+      border: 1px solid var(--border-muted);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .occ-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .occ-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      font-size: 0.875rem;
+    }
+
+    .occ-label {
+      color: var(--text-muted);
+      font-weight: 600;
+      min-width: 70px;
+    }
+
+    .occ-value {
+      color: var(--text);
+    }
+
+    .occ-value a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .occ-value a:hover {
+      text-decoration: underline;
+    }
+
+    .occ-value code {
       background: var(--code-bg);
       border: 1px solid var(--code-border);
-      padding: .35rem .5rem;
-      border-radius: 6px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: .85rem;
-      overflow-x: auto;
-      color: #d1e9ff;
-    }
-    .occ .shot {
-      margin-top: .5rem;
-      border: 1px solid var(--border);
-      background: #0a0f1c;
-      border-radius: 8px;
-      padding: .35rem;
-      max-width: 520px;
-    }
-    .occ .shot img {
-      display:block; width:100%; height:auto; border-radius:6px;
+      padding: 0.125rem 0.375rem;
+      border-radius: 4px;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 0.8125rem;
+      color: #79c0ff;
     }
 
-    .raw-list { display: flex; flex-wrap: wrap; gap: .4rem; }
-    .raw-list a {
+    .snippet {
+      margin-top: 0.75rem;
+    }
+
+    .snippet-label {
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      margin-bottom: 0.375rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 6px;
+      padding: 0.75rem;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    pre code {
+      color: #e6edf3;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .screenshot {
+      margin-top: 1rem;
+      background: var(--code-bg);
+      border: 1px solid var(--border-muted);
+      border-radius: 8px;
+      padding: 0.75rem;
+    }
+
+    .screenshot-label {
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .screenshot img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
       border: 1px solid var(--border);
-      background: var(--chip);
-      color: var(--text);
-      padding: .25rem .5rem;
-      border-radius: 999px;
-      font-size: .8rem;
+      image-rendering: crisp-edges;
+      image-rendering: -webkit-optimize-contrast;
     }
 
     footer {
-      margin-top: 1.25rem; color: var(--muted); font-size: .85rem;
       text-align: center;
+      padding: 2rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      header {
+        padding: 1.5rem;
+        position: static;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .summary {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi .value {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <header class="card">
+    <header>
       <h1>{{ model.title }}</h1>
-      <div class="meta">Generated at: {{ model.generated_at }}</div>
+      <div class="meta">Generated {{ model.generated_at }}</div>
     </header>
 
     <section class="card">
@@ -187,12 +465,13 @@
           <div class="value">{{ model.raw_files|length }}</div>
         </div>
       </div>
+
       {% if model.raw_files %}
-      <div style="margin-top:.8rem">
-        <div class="section-title" style="margin-bottom:.4rem">Raw Result Files</div>
+      <div class="raw-files">
+        <div class="raw-files-title">Raw JSON Reports</div>
         <div class="raw-list">
           {% for f in model.raw_files %}
-            <a href="{{ results_web_base }}/{{ f }}" target="_blank" rel="noopener">{{ f }}</a>
+          <a href="{{ results_web_base }}/{{ f }}" target="_blank" rel="noopener">{{ f }}</a>
           {% endfor %}
         </div>
       </div>
@@ -200,64 +479,81 @@
     </section>
 
     {% if model.total_violations == 0 %}
-      <section class="card">
-        <div class="section-title">Details</div>
-        <p class="rule-desc">No accessibility violations were found.</p>
-      </section>
+    <section class="card">
+      <div class="section-title">Violations</div>
+      <p class="rule-desc">✅ No accessibility violations found! Great work!</p>
+    </section>
     {% else %}
-      <section class="card">
-        <div class="section-title">Violations by Rule</div>
-        <div class="rules">
-          {% for grp in model.by_rule %}
-            <article class="rule {{ grp.impact_class }}">
-              <div class="rule-header">
-                <span class="rule-id">{{ grp.id }}</span>
-                {% if grp.impact %}
-                  <span class="chip chip-impact">impact: {{ grp.impact }}</span>
-                {% else %}
-                  <span class="chip chip-impact">impact: unknown</span>
-                {% endif %}
-                <span class="chip">occurrences: {{ grp.count }}</span>
-                {% if grp.helpUrl %}
-                  <a class="chip" href="{{ grp.helpUrl }}" target="_blank" rel="noopener">learn more</a>
+    <section class="card">
+      <div class="section-title">Violations by Rule ({{ model.by_rule|length }} rules)</div>
+      <div class="rules">
+        {% for grp in model.by_rule %}
+        <article class="rule {{ grp.impact_class }}">
+          <div class="rule-header">
+            <span class="rule-id">{{ grp.id }}</span>
+            {% if grp.impact %}
+            <span class="badge badge-impact">{{ grp.impact }}</span>
+            {% else %}
+            <span class="badge badge-impact">unknown</span>
+            {% endif %}
+            <span class="badge badge-count">{{ grp.count }} occurrence{{ 's' if grp.count != 1 else '' }}</span>
+            {% if grp.helpUrl %}
+            <a class="badge badge-link" href="{{ grp.helpUrl }}" target="_blank" rel="noopener">Documentation →</a>
+            {% endif %}
+          </div>
+
+          {% if grp.description %}
+          <div class="rule-desc">{{ grp.description }}</div>
+          {% elif grp.help %}
+          <div class="rule-desc">{{ grp.help }}</div>
+          {% endif %}
+
+          <div class="occ-list">
+            {% for occ in grp.occurrences %}
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                    {% if occ.source_file %}
+                      {{ occ.source_file }}
+                    {% else %}
+                      <a href="{{ occ.url }}" target="_blank" rel="noopener">{{ occ.url }}</a>
+                    {% endif %}
+                  </span>
+                </div>
+                {% if occ.selector %}
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>{{ occ.selector }}</code></span>
+                </div>
                 {% endif %}
               </div>
-              {% if grp.description %}
-                <div class="rule-desc">{{ grp.description }}</div>
-              {% elif grp.help %}
-                <div class="rule-desc">{{ grp.help }}</div>
+
+              {% if occ.html_snippet %}
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>{{ occ.html_snippet | e }}</code></pre>
+              </div>
               {% endif %}
 
-              <div class="occ-list">
-                {% for occ in grp.occurrences %}
-                  <div class="occ">
-                    <div class="row">
-                      <div class="kv"><b>URL:</b> <a href="{{ occ.url }}" target="_blank" rel="noopener">{{ occ.url }}</a></div>
-                      {% if occ.source_file %}<div class="kv"><b>Source:</b> {{ occ.source_file }}</div>{% endif %}
-                      {% if occ.selector %}<div class="kv"><b>Selector:</b> <code>{{ occ.selector }}</code></div>{% endif %}
-                    </div>
-                    {% if occ.html_snippet %}
-                      <div style="margin-top:.45rem">
-                        <div class="kv"><b>HTML Snippet</b></div>
-                        <pre><code>{{ occ.html_snippet | e }}</code></pre>
-                      </div>
-                    {% endif %}
-                    {% if occ.screenshot_filename %}
-                      <div class="shot">
-                        <img src="{{ results_web_base }}/{{ occ.screenshot_filename }}" alt="screenshot of violation {{ grp.id }}">
-                      </div>
-                    {% endif %}
-                  </div>
-                {% endfor %}
+              {% if occ.screenshot_filename %}
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="{{ results_web_base }}/{{ occ.screenshot_filename }}" alt="Screenshot showing {{ grp.id }} violation" loading="lazy">
               </div>
-            </article>
-          {% endfor %}
-        </div>
-      </section>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
     {% endif %}
 
     <footer>
-      a11y-scanner • Report generated by axe-core + Playwright • {{ model.generated_at }}
+      <strong>a11y-scanner</strong> • Powered by <a href="https://github.com/dequelabs/axe-core" target="_blank" rel="noopener">axe-core</a> + <a href="https://playwright.dev" target="_blank" rel="noopener">Playwright</a>
     </footer>
   </div>
 </body>

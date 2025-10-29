@@ -1,22 +1,26 @@
 
 FROM mcr.microsoft.com/playwright/python:v1.54.0-jammy
 
-ENV VIRTUAL_ENV=/home/pwuser/venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
 
 USER root
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends python3-pip python3.10-venv && \
-    rm -rf /var/lib/apt/lists/*
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+RUN rm -rf /var/lib/apt/lists/*
 
 USER pwuser
 WORKDIR /home/pwuser
 
-RUN python3 -m venv $VIRTUAL_ENV
+# Copy project files
+COPY --chown=pwuser:pwuser pyproject.toml uv.lock ./
+COPY --chown=pwuser:pwuser src ./src
 
-COPY --chown=pwuser:pwuser . .
+# Install dependencies with uv
+RUN uv sync --frozen --no-dev
 
-RUN pip install --no-cache-dir .
+# Add uv-managed bin directory to PATH
+ENV PATH="/home/pwuser/.venv/bin:$PATH"
 
 ENTRYPOINT ["python", "-m", "scanner.main"]
