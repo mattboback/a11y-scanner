@@ -9,7 +9,7 @@ description = "A containerized web accessibility scanner using Playwright and ax
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
-authors = [{ name = "Matt", email = "matt@example.com" }]
+authors = [{ name = "Matt", email = "matthewboback@gmail.com" }]
 keywords = [
     "accessibility",
     "a11y",
@@ -45,6 +45,7 @@ dependencies = [
   "fastapi==0.115.6",
   "uvicorn[standard]==0.34.2",
   "python-multipart==0.0.20",
+  "pydantic-settings>=2.0.0",
 ]
 
 [project.optional-dependencies]
@@ -71,11 +72,11 @@ scanner-integration = "scanner.container.integration:main"
 scanner-api = "scanner.web.server:run"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/a11y-scanner"
-Documentation = "https://github.com/yourusername/a11y-scanner/blob/main/README.md"
-Repository = "https://github.com/yourusername/a11y-scanner"
-Issues = "https://github.com/yourusername/a11y-scanner/issues"
-Changelog = "https://github.com/yourusername/a11y-scanner/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/mattboback/a11y-scanner"
+Documentation = "https://github.com/mattboback/a11y-scanner/blob/main/README.md"
+Repository = "https://github.com/mattboback/a11y-scanner"
+Issues = "https://github.com/mattboback/a11y-scanner/issues"
+Changelog = "https://github.com/mattboback/a11y-scanner/blob/main/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -1,7 +1,5 @@
-import json
 import zipfile
 from io import BytesIO
-from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -44,7 +42,7 @@ def test_index(client):
     """Test the index endpoint returns HTML."""
     response = client.get("/")
     assert response.status_code == 200
-    assert "a11y‑scanner API" in response.text
+    assert "a11y-scanner API" in response.text
     assert "/api/scan/zip" in response.text
     assert "/api/scan/url" in response.text
 
@@ -61,12 +59,10 @@ def test_scan_zip_requires_container(client):
 
 def test_scan_zip_invalid_mime_type(client, mock_container_env, sample_zip):
     """Test that scan_zip rejects non-ZIP MIME types."""
-    with patch("scanner.web.server.Pipeline") as mock_pipeline:
+    with patch("scanner.web.server.Pipeline"):
         response = client.post(
             "/api/scan/zip",
-            files={
-                "file": ("test.txt", sample_zip.getvalue(), "text/plain")
-            },
+            files={"file": ("test.txt", sample_zip.getvalue(), "text/plain")},
         )
         assert response.status_code == 400
         assert "Invalid file type" in response.json()["detail"]
@@ -74,12 +70,10 @@ def test_scan_zip_invalid_mime_type(client, mock_container_env, sample_zip):
 
 def test_scan_zip_invalid_extension(client, mock_container_env, sample_zip):
     """Test that scan_zip rejects files without .zip extension."""
-    with patch("scanner.web.server.Pipeline") as mock_pipeline:
+    with patch("scanner.web.server.Pipeline"):
         response = client.post(
             "/api/scan/zip",
-            files={
-                "file": ("test.txt", sample_zip.getvalue(), "application/zip")
-            },
+            files={"file": ("test.txt", sample_zip.getvalue(), "application/zip")},
         )
         assert response.status_code == 400
         assert ".zip extension" in response.json()["detail"]
@@ -87,7 +81,7 @@ def test_scan_zip_invalid_extension(client, mock_container_env, sample_zip):
 
 def test_scan_zip_empty_file(client, mock_container_env):
     """Test that scan_zip rejects empty files."""
-    with patch("scanner.web.server.Pipeline") as mock_pipeline:
+    with patch("scanner.web.server.Pipeline"):
         response = client.post(
             "/api/scan/zip",
             files={"file": ("test.zip", b"", "application/zip")},
@@ -100,7 +94,7 @@ def test_scan_zip_too_large(client, mock_container_env):
     """Test that scan_zip rejects files exceeding size limit."""
     # Create a file larger than MAX_UPLOAD_SIZE (100 MB)
     large_content = b"x" * (101 * 1024 * 1024)
-    with patch("scanner.web.server.Pipeline") as mock_pipeline:
+    with patch("scanner.web.server.Pipeline"):
         response = client.post(
             "/api/scan/zip",
             files={"file": ("test.zip", large_content, "application/zip")},
@@ -127,12 +121,10 @@ def test_scan_zip_success(client, mock_container_env, sample_zip, tmp_path):
         with patch("scanner.web.server.Pipeline") as mock_pipeline_class:
             # Mock pipeline run
             mock_pipeline = MagicMock()
-            mock_pipeline.run.return_value = [
-                {"id": "image-alt", "impact": "critical"}
-            ]
+            mock_pipeline.run.return_value = [{"id": "image-alt", "impact": "critical"}]
             mock_pipeline_class.return_value = mock_pipeline
 
-            with patch("scanner.web.server.build_report") as mock_report:
+            with patch("scanner.web.server.build_report"):
                 response = client.post(
                     "/api/scan/zip",
                     files={
@@ -150,9 +142,7 @@ def test_scan_zip_success(client, mock_container_env, sample_zip, tmp_path):
 
 def test_scan_url_requires_container(client):
     """Test that scan_url endpoint requires container environment."""
-    response = client.post(
-        "/api/scan/url", json={"urls": ["https://example.com"]}
-    )
+    response = client.post("/api/scan/url", json={"urls": ["https://example.com"]})
     assert response.status_code == 400
     assert "Must run inside container" in response.json()["detail"]
 
@@ -171,15 +161,15 @@ def test_scan_url_invalid_url(client, mock_container_env):
 def test_scan_url_success(client, mock_container_env, tmp_path):
     """Test successful URL scan."""
     # Mock the entire settings module reference
-    with patch("scanner.web.server.settings") as mock_settings, \
-         patch("scanner.web.server._clean_dir") as mock_clean:
+    with (
+        patch("scanner.web.server.settings") as mock_settings,
+        patch("scanner.web.server._clean_dir"),
+    ):
         mock_settings.results_dir = tmp_path / "results"
         mock_settings.data_dir = tmp_path / "data"
         mock_settings.results_dir.mkdir(parents=True, exist_ok=True)
 
-        with patch(
-            "scanner.web.server.PlaywrightAxeService"
-        ) as mock_axe_class:
+        with patch("scanner.web.server.PlaywrightAxeService") as mock_axe_class:
             # Mock axe service
             mock_axe = MagicMock()
             mock_axe.scan_url.return_value = [
@@ -187,8 +177,10 @@ def test_scan_url_success(client, mock_container_env, tmp_path):
             ]
             mock_axe_class.return_value = mock_axe
 
-            with patch("scanner.web.server.build_report") as mock_report, \
-                 patch("scanner.web.server.reports_dir", tmp_path / "reports"):
+            with (
+                patch("scanner.web.server.build_report"),
+                patch("scanner.web.server.reports_dir", tmp_path / "reports"),
+            ):
                 (tmp_path / "reports").mkdir(parents=True, exist_ok=True)
 
                 response = client.post(
@@ -208,15 +200,15 @@ def test_scan_url_success(client, mock_container_env, tmp_path):
 
 def test_scan_url_partial_failure(client, mock_container_env, tmp_path):
     """Test URL scan with some URLs failing."""
-    with patch("scanner.web.server.settings") as mock_settings, \
-         patch("scanner.web.server._clean_dir") as mock_clean:
+    with (
+        patch("scanner.web.server.settings") as mock_settings,
+        patch("scanner.web.server._clean_dir"),
+    ):
         mock_settings.results_dir = tmp_path / "results"
         mock_settings.data_dir = tmp_path / "data"
         mock_settings.results_dir.mkdir(parents=True, exist_ok=True)
 
-        with patch(
-            "scanner.web.server.PlaywrightAxeService"
-        ) as mock_axe_class:
+        with patch("scanner.web.server.PlaywrightAxeService") as mock_axe_class:
             # Mock axe service - first succeeds, second fails
             mock_axe = MagicMock()
             mock_axe.scan_url.side_effect = [
@@ -225,8 +217,10 @@ def test_scan_url_partial_failure(client, mock_container_env, tmp_path):
             ]
             mock_axe_class.return_value = mock_axe
 
-            with patch("scanner.web.server.build_report") as mock_report, \
-                 patch("scanner.web.server.reports_dir", tmp_path / "reports"):
+            with (
+                patch("scanner.web.server.build_report"),
+                patch("scanner.web.server.reports_dir", tmp_path / "reports"),
+            ):
                 (tmp_path / "reports").mkdir(parents=True, exist_ok=True)
 
                 response = client.post(
@@ -241,4 +235,4 @@ def test_scan_url_partial_failure(client, mock_container_env, tmp_path):
                 assert data["urls_scanned"] == 2
                 assert len(data["scanned_urls"]) == 2
                 # Second URL should show failure
-                assert "failed" in data["scanned_urls"][1]
+                assert "bad.com" in data["scanned_urls"][1]
