@@ -1,5 +1,7 @@
 # Architecture Overview
 
+> **Quick Navigation**: This is a high-level overview for new contributors. For an in-depth architectural analysis, see [Architecture Guide](./architecture.md).
+
 The accessibility scanner is split into three major layers: orchestration (Docker
 and CLI tooling), the scanning pipeline, and reporting/web delivery. This
 document highlights the key modules so new contributors can navigate the codebase
