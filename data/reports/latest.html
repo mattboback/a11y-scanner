@@ -444,7 +444,7 @@
   <div class="container">
     <header>
       <h1>Accessibility Report</h1>
-      <div class="meta">Generated 2025-10-29 21:16:59Z</div>
+      <div class="meta">Generated 2025-10-30 04:41:49Z</div>
     </header>
 
     <section class="card">
@@ -452,37 +452,44 @@
       <div class="summary">
         <div class="kpi">
           <div class="label">Pages Scanned</div>
-          <div class="value">2</div>
+          <div class="value">9</div>
         </div>
         <div class="kpi">
           <div class="label">Total Violations</div>
-          <div class="value status-warn">
-            9
+          <div class="value status-bad">
+            33
           </div>
         </div>
         <div class="kpi">
           <div class="label">Raw Artifacts</div>
-          <div class="value">2</div>
+          <div class="value">9</div>
         </div>
       </div>
 
       <div class="raw-files">
         <div class="raw-files-title">Raw JSON Reports</div>
         <div class="raw-list">
-          <a href="../results/Flat-1.0.0___MACOSX_template-free-lite_._index.html.json" target="_blank" rel="noopener">Flat-1.0.0___MACOSX_template-free-lite_._index.html.json</a>
-          <a href="../results/Flat-1.0.0_index.html.json" target="_blank" rel="noopener">Flat-1.0.0_index.html.json</a>
+          <a href="../results/play-tailwind-1.0.0_404.html.json" target="_blank" rel="noopener">play-tailwind-1.0.0_404.html.json</a>
+          <a href="../results/play-tailwind-1.0.0_about.html.json" target="_blank" rel="noopener">play-tailwind-1.0.0_about.html.json</a>
+          <a href="../results/play-tailwind-1.0.0_blog-details.html.json" target="_blank" rel="noopener">play-tailwind-1.0.0_blog-details.html.json</a>
+          <a href="../results/play-tailwind-1.0.0_blog-grids.html.json" target="_blank" rel="noopener">play-tailwind-1.0.0_blog-grids.html.json</a>
+          <a href="../results/play-tailwind-1.0.0_contact.html.json" target="_blank" rel="noopener">play-tailwind-1.0.0_contact.html.json</a>
+          <a href="../results/play-tailwind-1.0.0_index.html.json" target="_blank" rel="noopener">play-tailwind-1.0.0_index.html.json</a>
+          <a href="../results/play-tailwind-1.0.0_pricing.html.json" target="_blank" rel="noopener">play-tailwind-1.0.0_pricing.html.json</a>
+          <a href="../results/play-tailwind-1.0.0_signin.html.json" target="_blank" rel="noopener">play-tailwind-1.0.0_signin.html.json</a>
+          <a href="../results/play-tailwind-1.0.0_signup.html.json" target="_blank" rel="noopener">play-tailwind-1.0.0_signup.html.json</a>
         </div>
       </div>
     </section>
 
     <section class="card">
-      <div class="section-title">Violations by Rule (6 rules)</div>
+      <div class="section-title">Violations by Rule (5 rules)</div>
       <div class="rules">
         <article class="rule impact-serious">
           <div class="rule-header">
             <span class="rule-id">color-contrast</span>
             <span class="badge badge-impact">serious</span>
-            <span class="badge badge-count">1 occurrence</span>
+            <span class="badge badge-count">5 occurrences</span>
             <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/color-contrast?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
           </div>
 
@@ -494,36 +501,134 @@
                 <div class="occ-meta-row">
                   <span class="occ-label">Page:</span>
                   <span class="occ-value">
-                      Flat-1.0.0/index.html
+                      play-tailwind-1.0.0/about.html
                   </span>
                 </div>
                 <div class="occ-meta-row">
                   <span class="occ-label">Selector:</span>
-                  <span class="occ-value"><code>a[href$="#home"]</code></span>
+                  <span class="occ-value"><code>.leading-relaxed</code></span>
                 </div>
               </div>
 
               <div class="snippet">
                 <div class="snippet-label">HTML Snippet</div>
-                <pre><code>&lt;a class=&#34;page-scroll active&#34; href=&#34;#home&#34;&gt;Home&lt;/a&gt;</code></pre>
+                <pre><code>&lt;p class=&#34;mb-10 text-base leading-relaxed text-body-color dark:text-dark-6&#34;&gt;</code></pre>
               </div>
 
               <div class="screenshot">
                 <div class="screenshot-label">Visual Reference</div>
-                <img src="../results/violation-color-contrast-fe36e1fe-17d3-4c98-83ed-c68ee815c1e4.png" alt="Screenshot showing color-contrast violation" loading="lazy">
+                <img src="../results/violation-color-contrast-238ec066-2349-40c7-a328-6b1c1ca6d808.png" alt="Screenshot showing color-contrast violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/blog-grids.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>.animated.wow[data-wow-delay=".1s"] > div:nth-child(2) > .py-0\.5.text-xs.leading-loose</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;span class=&#34;inline-block px-4 py-0.5 mb-6 text-xs font-medium leading-loose text-center text-white rounded-[5px] bg-primary&#34;&gt;
+                  Dec 22, 2023
+                &lt;/span&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-color-contrast-4df642a9-7c58-4792-b121-295f589e6100.png" alt="Screenshot showing color-contrast violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/contact.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>label[for="fullName"]</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;label for=&#34;fullName&#34; class=&#34;block mb-4 text-sm text-body-color dark:text-dark-6&#34;&gt;Full Name*&lt;/label&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-color-contrast-1a2cea3b-86e7-46e2-91aa-2acd97f224c0.png" alt="Screenshot showing color-contrast violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/signin.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>input[type="email"]</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;input type=&#34;email&#34; placeholder=&#34;Email&#34; class=&#34;w-full px-5 py-3 text-base transition bg-transparent border rounded-md outline-hidden border-stroke dark:border-dark-3 text-body-color dark:text-dark-6 placeholder:text-dark-6 focus:border-primary dark:focus:border-primary focus-visible:shadow-none&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-color-contrast-b7420183-7099-4236-a204-53e17525a45a.png" alt="Screenshot showing color-contrast violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/signup.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>input[type="text"]</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;input type=&#34;text&#34; placeholder=&#34;Name&#34; class=&#34;w-full px-5 py-3 text-base transition bg-transparent border rounded-md outline-hidden border-stroke dark:border-dark-3 text-body-color dark:text-dark-6 placeholder:text-dark-6 focus:border-primary dark:focus:border-primary focus-visible:shadow-none&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-color-contrast-b5012d64-1357-48b0-a9b8-728bb1762a12.png" alt="Screenshot showing color-contrast violation" loading="lazy">
               </div>
             </div>
           </div>
         </article>
         <article class="rule impact-serious">
           <div class="rule-header">
-            <span class="rule-id">document-title</span>
+            <span class="rule-id">link-name</span>
             <span class="badge badge-impact">serious</span>
-            <span class="badge badge-count">1 occurrence</span>
-            <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/document-title?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
+            <span class="badge badge-count">4 occurrences</span>
+            <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/link-name?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
           </div>
 
-          <div class="rule-desc">Ensures each HTML document contains a non-empty <title> element</div>
+          <div class="rule-desc">Ensures links have discernible text</div>
 
           <div class="occ-list">
             <div class="occ">
@@ -531,36 +636,108 @@
                 <div class="occ-meta-row">
                   <span class="occ-label">Page:</span>
                   <span class="occ-value">
-                      Flat-1.0.0/__MACOSX/template-free-lite/._index.html
+                      play-tailwind-1.0.0/about.html
                   </span>
                 </div>
                 <div class="occ-meta-row">
                   <span class="occ-label">Selector:</span>
-                  <span class="occ-value"><code>html</code></span>
+                  <span class="occ-value"><code>.lg\:w-1\/4.xl\:w-1\/4.sm\:w-1\/2:nth-child(1) > .px-5.pt-12.pb-10 > .text-center > .gap-5.justify-center.items-center > .text-dark-6.hover\:text-primary[href="javascript:void(0)"]:nth-child(1)</code></span>
                 </div>
               </div>
 
               <div class="snippet">
                 <div class="snippet-label">HTML Snippet</div>
-                <pre><code>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Mac OS X        	2~°ATTR°&amp;nbsp;&amp;nbsp;com.apple.lastuseddate#PS“Ï_—IŸ&lt;/body&gt;&lt;/html&gt;</code></pre>
+                <pre><code>&lt;a href=&#34;javascript:void(0)&#34; class=&#34;text-dark-6 hover:text-primary&#34;&gt;</code></pre>
               </div>
 
               <div class="screenshot">
                 <div class="screenshot-label">Visual Reference</div>
-                <img src="../results/violation-document-title-d416ae8a-45e8-4733-8d5b-071955a400df.png" alt="Screenshot showing document-title violation" loading="lazy">
+                <img src="../results/violation-link-name-baffca3e-88d6-478b-b385-25127de606f6.png" alt="Screenshot showing link-name violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/index.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>.text-white\/60[onclick="event.preventDefault();"][target="_blank"]:nth-child(1)</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;a href=&#34;#&#34; onclick=&#34;event.preventDefault();&#34; class=&#34;duration-300 ease-in-out text-white/60 hover:text-white&#34; target=&#34;_blank&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-link-name-ef27c68e-6ab8-4d9c-ab16-70a9b299568a.png" alt="Screenshot showing link-name violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/signin.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>.bg-\[\#4064AC\]</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;a href=&#34;javascript:void(0)&#34; class=&#34;flex h-11 items-center justify-center rounded-md bg-[#4064AC] transition hover:bg-[#4064AC]/90&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-link-name-e8541258-ae3c-430a-bf08-362b0ae850b6.png" alt="Screenshot showing link-name violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/signup.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>.bg-\[\#4064AC\]</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;a href=&#34;javascript:void(0)&#34; class=&#34;flex h-11 items-center justify-center rounded-md bg-[#4064AC] transition hover:bg-[#4064AC]/90&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-link-name-b1199cfb-eb53-4786-a3a7-a99b41bc97b6.png" alt="Screenshot showing link-name violation" loading="lazy">
               </div>
             </div>
           </div>
         </article>
-        <article class="rule impact-serious">
+        <article class="rule impact-moderate">
           <div class="rule-header">
-            <span class="rule-id">html-has-lang</span>
-            <span class="badge badge-impact">serious</span>
-            <span class="badge badge-count">2 occurrences</span>
-            <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/html-has-lang?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
+            <span class="rule-id">heading-order</span>
+            <span class="badge badge-impact">moderate</span>
+            <span class="badge badge-count">6 occurrences</span>
+            <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/heading-order?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
           </div>
 
-          <div class="rule-desc">Ensures every HTML document has a lang attribute</div>
+          <div class="rule-desc">Ensures the order of headings is semantically correct</div>
 
           <div class="occ-list">
             <div class="occ">
@@ -568,23 +745,25 @@
                 <div class="occ-meta-row">
                   <span class="occ-label">Page:</span>
                   <span class="occ-value">
-                      Flat-1.0.0/__MACOSX/template-free-lite/._index.html
+                      play-tailwind-1.0.0/404.html
                   </span>
                 </div>
                 <div class="occ-meta-row">
                   <span class="occ-label">Selector:</span>
-                  <span class="occ-value"><code>html</code></span>
+                  <span class="occ-value"><code>h3</code></span>
                 </div>
               </div>
 
               <div class="snippet">
                 <div class="snippet-label">HTML Snippet</div>
-                <pre><code>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Mac OS X        	2~°ATTR°&amp;nbsp;&amp;nbsp;com.apple.lastuseddate#PS“Ï_—IŸ&lt;/body&gt;&lt;/html&gt;</code></pre>
+                <pre><code>&lt;h3 class=&#34;mb-5 text-2xl font-semibold text-dark dark:text-white&#34;&gt;
+                We Can&#39;t Seem to Find The Page You&#39;re Looking For.
+              &lt;/h3&gt;</code></pre>
               </div>
 
               <div class="screenshot">
                 <div class="screenshot-label">Visual Reference</div>
-                <img src="../results/violation-html-has-lang-f8921d99-0330-4d05-9c2c-1e82ef9b0de6.png" alt="Screenshot showing html-has-lang violation" loading="lazy">
+                <img src="../results/violation-heading-order-87eba83e-5fbe-4417-8d90-708b83912c3b.png" alt="Screenshot showing heading-order violation" loading="lazy">
               </div>
             </div>
             <div class="occ">
@@ -592,23 +771,127 @@
                 <div class="occ-meta-row">
                   <span class="occ-label">Page:</span>
                   <span class="occ-value">
-                      Flat-1.0.0/index.html
+                      play-tailwind-1.0.0/about.html
                   </span>
                 </div>
                 <div class="occ-meta-row">
                   <span class="occ-label">Selector:</span>
-                  <span class="occ-value"><code>html</code></span>
+                  <span class="occ-value"><code>.lg\:w-1\/4.xl\:w-1\/4.sm\:w-1\/2:nth-child(1) > .px-5.pt-12.pb-10 > .text-center > .mb-1</code></span>
                 </div>
               </div>
 
               <div class="snippet">
                 <div class="snippet-label">HTML Snippet</div>
-                <pre><code>&lt;html class=&#34;no-js&#34; lang=&#34;&#34;&gt;</code></pre>
+                <pre><code>&lt;h4 class=&#34;mb-1 text-lg font-semibold text-dark dark:text-white&#34;&gt;
+                  Melissa Tatcher
+                &lt;/h4&gt;</code></pre>
               </div>
 
               <div class="screenshot">
                 <div class="screenshot-label">Visual Reference</div>
-                <img src="../results/violation-html-has-lang-3718d894-18e9-4c7a-aeca-7920d7038050.png" alt="Screenshot showing html-has-lang violation" loading="lazy">
+                <img src="../results/violation-heading-order-add83d1b-700a-4720-843a-a6ccef5d5887.png" alt="Screenshot showing heading-order violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/blog-grids.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>.animated.wow[data-wow-delay=".1s"] > div:nth-child(2) > h3</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;h3&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-heading-order-ce9c74a1-101c-465f-a014-ac5ca152584f.png" alt="Screenshot showing heading-order violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/contact.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>.w-\[330px\].mb-8.max-w-full:nth-child(1) > div:nth-child(2) > h5</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;h5 class=&#34;mb-[18px] text-lg font-semibold text-dark dark:text-white&#34;&gt;
+                      Our Location
+                    &lt;/h5&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-heading-order-c62d4b84-fedb-4f87-acfb-7d782a886493.png" alt="Screenshot showing heading-order violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/index.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>.lg\:w-1\/3.md\:w-1\/2.w-full:nth-child(1) > .shadow-pricing.sm\:p-12.lg\:px-6 > .mb-\[50px\] > h5</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;h5 class=&#34;mb-5 text-lg font-medium text-dark dark:text-white&#34;&gt;
+                  Features
+                &lt;/h5&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-heading-order-950a0533-89df-4ce5-86fd-bd6699239d50.png" alt="Screenshot showing heading-order violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/pricing.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>.lg\:w-1\/3.md\:w-1\/2.w-full:nth-child(1) > .px-8.py-10.rounded-xl > .mb-\[50px\] > h5</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;h5 class=&#34;mb-5 text-lg font-medium text-dark dark:text-white&#34;&gt;
+                  Features
+                &lt;/h5&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-heading-order-2708f6f2-6918-46ef-b66a-2e9a14ac022c.png" alt="Screenshot showing heading-order violation" loading="lazy">
               </div>
             </div>
           </div>
@@ -617,7 +900,7 @@
           <div class="rule-header">
             <span class="rule-id">landmark-one-main</span>
             <span class="badge badge-impact">moderate</span>
-            <span class="badge badge-count">2 occurrences</span>
+            <span class="badge badge-count">9 occurrences</span>
             <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/landmark-one-main?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
           </div>
 
@@ -629,7 +912,7 @@
                 <div class="occ-meta-row">
                   <span class="occ-label">Page:</span>
                   <span class="occ-value">
-                      Flat-1.0.0/__MACOSX/template-free-lite/._index.html
+                      play-tailwind-1.0.0/404.html
                   </span>
                 </div>
                 <div class="occ-meta-row">
@@ -640,12 +923,12 @@
 
               <div class="snippet">
                 <div class="snippet-label">HTML Snippet</div>
-                <pre><code>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Mac OS X        	2~°ATTR°&amp;nbsp;&amp;nbsp;com.apple.lastuseddate#PS“Ï_—IŸ&lt;/body&gt;&lt;/html&gt;</code></pre>
+                <pre><code>&lt;html lang=&#34;en&#34;&gt;</code></pre>
               </div>
 
               <div class="screenshot">
                 <div class="screenshot-label">Visual Reference</div>
-                <img src="../results/violation-landmark-one-main-8bdf65db-3bdd-475b-89b4-144b45483e7c.png" alt="Screenshot showing landmark-one-main violation" loading="lazy">
+                <img src="../results/violation-landmark-one-main-7111cb8f-c2e1-4e05-9fbf-c1ea4813a81d.png" alt="Screenshot showing landmark-one-main violation" loading="lazy">
               </div>
             </div>
             <div class="occ">
@@ -653,7 +936,7 @@
                 <div class="occ-meta-row">
                   <span class="occ-label">Page:</span>
                   <span class="occ-value">
-                      Flat-1.0.0/index.html
+                      play-tailwind-1.0.0/about.html
                   </span>
                 </div>
                 <div class="occ-meta-row">
@@ -664,49 +947,12 @@
 
               <div class="snippet">
                 <div class="snippet-label">HTML Snippet</div>
-                <pre><code>&lt;html class=&#34;no-js&#34; lang=&#34;&#34;&gt;</code></pre>
+                <pre><code>&lt;html lang=&#34;en&#34;&gt;</code></pre>
               </div>
 
               <div class="screenshot">
                 <div class="screenshot-label">Visual Reference</div>
-                <img src="../results/violation-landmark-one-main-0422bf3c-7ae5-473e-bb76-e1278bc8b0fd.png" alt="Screenshot showing landmark-one-main violation" loading="lazy">
-              </div>
-            </div>
-          </div>
-        </article>
-        <article class="rule impact-moderate">
-          <div class="rule-header">
-            <span class="rule-id">page-has-heading-one</span>
-            <span class="badge badge-impact">moderate</span>
-            <span class="badge badge-count">2 occurrences</span>
-            <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/page-has-heading-one?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
-          </div>
-
-          <div class="rule-desc">Ensure that the page, or at least one of its frames contains a level-one heading</div>
-
-          <div class="occ-list">
-            <div class="occ">
-              <div class="occ-meta">
-                <div class="occ-meta-row">
-                  <span class="occ-label">Page:</span>
-                  <span class="occ-value">
-                      Flat-1.0.0/__MACOSX/template-free-lite/._index.html
-                  </span>
-                </div>
-                <div class="occ-meta-row">
-                  <span class="occ-label">Selector:</span>
-                  <span class="occ-value"><code>html</code></span>
-                </div>
-              </div>
-
-              <div class="snippet">
-                <div class="snippet-label">HTML Snippet</div>
-                <pre><code>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Mac OS X        	2~°ATTR°&amp;nbsp;&amp;nbsp;com.apple.lastuseddate#PS“Ï_—IŸ&lt;/body&gt;&lt;/html&gt;</code></pre>
-              </div>
-
-              <div class="screenshot">
-                <div class="screenshot-label">Visual Reference</div>
-                <img src="../results/violation-page-has-heading-one-15e57168-266a-4210-a279-21c1d38e19dc.png" alt="Screenshot showing page-has-heading-one violation" loading="lazy">
+                <img src="../results/violation-landmark-one-main-2b057fc9-b3f0-4ba8-af29-31f15d1d9e88.png" alt="Screenshot showing landmark-one-main violation" loading="lazy">
               </div>
             </div>
             <div class="occ">
@@ -714,7 +960,7 @@
                 <div class="occ-meta-row">
                   <span class="occ-label">Page:</span>
                   <span class="occ-value">
-                      Flat-1.0.0/index.html
+                      play-tailwind-1.0.0/blog-details.html
                   </span>
                 </div>
                 <div class="occ-meta-row">
@@ -725,12 +971,156 @@
 
               <div class="snippet">
                 <div class="snippet-label">HTML Snippet</div>
-                <pre><code>&lt;html class=&#34;no-js&#34; lang=&#34;&#34;&gt;</code></pre>
+                <pre><code>&lt;html lang=&#34;en&#34;&gt;</code></pre>
               </div>
 
               <div class="screenshot">
                 <div class="screenshot-label">Visual Reference</div>
-                <img src="../results/violation-page-has-heading-one-6bd69713-c932-4790-a028-f0a97a9e5ebb.png" alt="Screenshot showing page-has-heading-one violation" loading="lazy">
+                <img src="../results/violation-landmark-one-main-d2ce0f35-3ecd-46b2-84c5-b1c94a045333.png" alt="Screenshot showing landmark-one-main violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/blog-grids.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>html</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;html lang=&#34;en&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-landmark-one-main-f7f6e691-126f-4af5-aaab-bd2798fb0f89.png" alt="Screenshot showing landmark-one-main violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/contact.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>html</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;html lang=&#34;en&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-landmark-one-main-7028a437-f2d5-4a55-9d32-a852ec4e9d9b.png" alt="Screenshot showing landmark-one-main violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/index.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>html</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;html lang=&#34;en&#34; class=&#34;scroll-smooth&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-landmark-one-main-a792876e-fc85-49b1-83d6-ec772835424c.png" alt="Screenshot showing landmark-one-main violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/pricing.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>html</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;html lang=&#34;en&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-landmark-one-main-cf5bb335-7354-4859-abe3-12f1b03ee3ba.png" alt="Screenshot showing landmark-one-main violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/signin.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>html</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;html lang=&#34;en&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-landmark-one-main-1deedb84-ac9b-49c2-97fe-04324ed16f13.png" alt="Screenshot showing landmark-one-main violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/signup.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>html</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;html lang=&#34;en&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-landmark-one-main-689188b7-585d-482b-bb1f-32d57895a32b.png" alt="Screenshot showing landmark-one-main violation" loading="lazy">
               </div>
             </div>
           </div>
@@ -739,7 +1129,7 @@
           <div class="rule-header">
             <span class="rule-id">region</span>
             <span class="badge badge-impact">moderate</span>
-            <span class="badge badge-count">1 occurrence</span>
+            <span class="badge badge-count">9 occurrences</span>
             <a class="badge badge-link" href="https://dequeuniversity.com/rules/axe/4.4/region?application=axeAPI" target="_blank" rel="noopener">Documentation →</a>
           </div>
 
@@ -751,23 +1141,219 @@
                 <div class="occ-meta-row">
                   <span class="occ-label">Page:</span>
                   <span class="occ-value">
-                      Flat-1.0.0/index.html
+                      play-tailwind-1.0.0/404.html
                   </span>
                 </div>
                 <div class="occ-meta-row">
                   <span class="occ-label">Selector:</span>
-                  <span class="occ-value"><code>.hero-section</code></span>
+                  <span class="occ-value"><code>img[src$="logo.svg"]</code></span>
                 </div>
               </div>
 
               <div class="snippet">
                 <div class="snippet-label">HTML Snippet</div>
-                <pre><code>&lt;div class=&#34;hero-section hero-style-2&#34;&gt;</code></pre>
+                <pre><code>&lt;img src=&#34;assets/images/logo/logo.svg&#34; alt=&#34;logo&#34; class=&#34;w-full dark:hidden&#34;&gt;</code></pre>
               </div>
 
               <div class="screenshot">
                 <div class="screenshot-label">Visual Reference</div>
-                <img src="../results/violation-region-09f917ef-856b-465d-bc47-19d308f105e6.png" alt="Screenshot showing region violation" loading="lazy">
+                <img src="../results/violation-region-8a744908-fca5-416c-bd82-b8eeabfb6076.png" alt="Screenshot showing region violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/about.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>img[src$="logo.svg"]</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;img src=&#34;assets/images/logo/logo.svg&#34; alt=&#34;logo&#34; class=&#34;w-full dark:hidden&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-region-01c490ac-7e83-4b85-a9bf-d6f8cf251f9e.png" alt="Screenshot showing region violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/blog-details.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>img[src$="logo.svg"]</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;img src=&#34;assets/images/logo/logo.svg&#34; alt=&#34;logo&#34; class=&#34;w-full dark:hidden&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-region-00d2173a-742b-4461-b636-07abf9ebf282.png" alt="Screenshot showing region violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/blog-grids.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>img[src$="logo.svg"]</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;img src=&#34;assets/images/logo/logo.svg&#34; alt=&#34;logo&#34; class=&#34;w-full dark:hidden&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-region-eb338eda-51e6-4d8c-ac33-81902c4f7db5.png" alt="Screenshot showing region violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/contact.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>img[src$="logo.svg"]</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;img src=&#34;assets/images/logo/logo.svg&#34; alt=&#34;logo&#34; class=&#34;w-full dark:hidden&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-region-587b8f1e-58ec-4301-adac-d6b81cc9b86a.png" alt="Screenshot showing region violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/index.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>.w-60</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;div class=&#34;max-w-full px-4 w-60&#34;&gt;
+            &lt;a href=&#34;index.html&#34; class=&#34;block w-full py-5 navbar-logo&#34;&gt;
+              &lt;img src=&#34;assets/images/logo/logo-white.svg&#34; alt=&#34;logo&#34; class=&#34;w-full header-logo&#34;&gt;
+            &lt;/a&gt;
+          &lt;/div&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-region-6c73ec53-36ed-4367-820f-f53e90b094aa.png" alt="Screenshot showing region violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/pricing.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>img[src$="logo.svg"]</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;img src=&#34;assets/images/logo/logo.svg&#34; alt=&#34;logo&#34; class=&#34;w-full dark:hidden&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-region-5f75fbc3-23cc-4117-b63b-ae16ac0de3d2.png" alt="Screenshot showing region violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/signin.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>.navbar-logo > .dark\:hidden[src$="logo.svg"][alt="logo"]</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;img src=&#34;assets/images/logo/logo.svg&#34; alt=&#34;logo&#34; class=&#34;w-full dark:hidden&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-region-81aa929b-ee40-4983-838d-3d69f132bcb4.png" alt="Screenshot showing region violation" loading="lazy">
+              </div>
+            </div>
+            <div class="occ">
+              <div class="occ-meta">
+                <div class="occ-meta-row">
+                  <span class="occ-label">Page:</span>
+                  <span class="occ-value">
+                      play-tailwind-1.0.0/signup.html
+                  </span>
+                </div>
+                <div class="occ-meta-row">
+                  <span class="occ-label">Selector:</span>
+                  <span class="occ-value"><code>.navbar-logo > .dark\:hidden[src$="logo.svg"][alt="logo"]</code></span>
+                </div>
+              </div>
+
+              <div class="snippet">
+                <div class="snippet-label">HTML Snippet</div>
+                <pre><code>&lt;img src=&#34;assets/images/logo/logo.svg&#34; alt=&#34;logo&#34; class=&#34;w-full dark:hidden&#34;&gt;</code></pre>
+              </div>
+
+              <div class="screenshot">
+                <div class="screenshot-label">Visual Reference</div>
+                <img src="../results/violation-region-e7143a29-f31b-48ca-9e9b-22ffcf1b2c6e.png" alt="Screenshot showing region violation" loading="lazy">
               </div>
             </div>
           </div>
