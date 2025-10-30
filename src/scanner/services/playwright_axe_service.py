@@ -11,6 +11,27 @@ from playwright.sync_api import Browser, BrowserContext, Page, sync_playwright
 logger = logging.getLogger(__name__)
 
 
+def _sanitize_for_json(obj: Any) -> Any:
+    """
+    Recursively convert Playwright/JavaScript objects to JSON-serializable types.
+    Handles Error objects and other non-serializable types from Playwright's JS context.
+    """
+    if obj is None or isinstance(obj, (str, int, float, bool)):
+        return obj
+    if isinstance(obj, dict):
+        return {k: _sanitize_for_json(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_sanitize_for_json(item) for item in obj]
+    # Handle JavaScript Error objects and other non-serializable types
+    if hasattr(obj, "__class__") and "Error" in obj.__class__.__name__:
+        return {"error": str(obj), "type": obj.__class__.__name__}
+    # Try to convert to string as fallback
+    try:
+        return str(obj)
+    except Exception:
+        return f"<non-serializable: {type(obj).__name__}>"
+
+
 class PlaywrightAxeService:
     """
     Runs axe-core audits against pages using Playwright.
@@ -168,7 +189,7 @@ class PlaywrightAxeService:
         else:
             logger.info("No accessibility violations found at %s", url)
 
-        full_report = dict(results.response)
+        full_report = _sanitize_for_json(dict(results.response))
         full_report["scanned_url"] = url
         if source_file:
             full_report["source_file"] = source_file
