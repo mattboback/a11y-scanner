@@ -1,5 +1,7 @@
 # Architecture Guide
 
+> **Quick Start**: New to the project? Start with the [Architecture Overview](./architecture-overview.md) for a quick introduction, then return here for detailed technical information.
+
 This document provides a deep dive into the a11y-scanner architecture, including component design, data flow, orchestration patterns, and extension points.
 
 ## Table of Contents
