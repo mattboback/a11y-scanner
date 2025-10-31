@@ -93,10 +93,8 @@ class ZipService:
                     )
                     if total_uncompressed > MAX_UNCOMPRESSED:
                         raise RuntimeError(
-
-                                f"Archive expands to {total_uncompressed} bytes "
-                                f"(> {MAX_UNCOMPRESSED}). Aborting."
-
+                            f"Archive expands to {total_uncompressed} bytes "
+                            f"(> {MAX_UNCOMPRESSED}). Aborting."
                         )
                 except Exception:
                     # If size computation fails, continue but log a warning
