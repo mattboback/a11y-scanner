@@ -65,9 +65,14 @@ class PlaywrightAxeService:
         self, page: Page, violation: dict[str, Any], results_dir: Path
     ) -> str | None:
         """
-        Safely capture a screenshot for a violation.
-        - Uses locator.evaluate with a function to avoid selector string injection.
-        - Falls back to a plain full-page screenshot without injecting CSS.
+        Capture a screenshot with intelligent RGB-inverse highlighting.
+
+        Strategy:
+        1. Locate element and get its average background color
+        2. Calculate RGB inverse for maximum contrast
+        3. Apply obnoxious multi-layer highlighting in inverse color
+        4. Capture with intelligent sizing (min 200px width, context padding)
+        5. Fall back to viewport screenshot if element capture fails
         """
         if not self._screenshots_enabled:
             return None
@@ -81,38 +86,143 @@ class PlaywrightAxeService:
             return None
 
         selector = targets[0]
+        screenshot_filename = f"violation-{violation['id']}-{uuid.uuid4()}.png"
+        screenshot_path = results_dir / screenshot_filename
+
         try:
-            screenshot_filename = f"violation-{violation['id']}-{uuid.uuid4()}.png"
-            screenshot_path = results_dir / screenshot_filename
+            locator = page.locator(selector).first
+
+            # Scroll element into view
             try:
-                locator = page.locator(selector).first
-                # Use a function body, not a string, to avoid injection vulnerabilities.
-                locator.evaluate(
-                    "(el) => { el.style.outline = '3px solid red'; el.style.outlineOffset = '2px'; }"
-                )
-                locator.screenshot(path=str(screenshot_path))
+                locator.scroll_into_view_if_needed(timeout=2000)
+            except Exception:
+                pass  # Continue even if scroll fails
+
+            # Choose a maximally-visible highlight color based on element's brightness
+            try:
+                avg_brightness = locator.evaluate("""
+                    (el) => {
+                        const styles = window.getComputedStyle(el);
+                        const bgColor = styles.backgroundColor;
+
+                        // Parse RGB from computed style
+                        const match = bgColor.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+                        if (!match) return 128;
+
+                        const r = parseInt(match[1]);
+                        const g = parseInt(match[2]);
+                        const b = parseInt(match[3]);
+
+                        // Calculate perceived brightness (0-255)
+                        return (r * 0.299 + g * 0.587 + b * 0.114);
+                    }
+                """)
+
+                # Choose OBNOXIOUS color based on brightness
+                if avg_brightness > 128:
+                    # Light background → Use dark, saturated color
+                    highlight_color = "rgb(255, 0, 255)"  # Bright magenta
+                else:
+                    # Dark background → Use bright, saturated color
+                    highlight_color = "rgb(0, 255, 255)"  # Bright cyan
+
+            except Exception:
+                # Fallback to bright magenta
+                highlight_color = "rgb(255, 0, 255)"
+
+            # Apply OBNOXIOUS multi-layer highlighting
+            locator.evaluate(f"""
+                (el) => {{
+                    const highlightColor = '{highlight_color}';
+
+                    // Multi-layer obnoxious highlighting
+                    el.style.outline = `8px solid ${{highlightColor}}`;
+                    el.style.outlineOffset = '4px';
+                    el.style.boxShadow = `
+                        0 0 0 12px ${{highlightColor}}40,
+                        0 0 0 16px ${{highlightColor}}30,
+                        0 0 30px 10px ${{highlightColor}}60,
+                        inset 0 0 0 3px ${{highlightColor}}
+                    `;
+                    el.style.position = 'relative';
+                    el.style.zIndex = '999999';
+
+                    // Add pulsing animation for extra obnoxiousness
+                    el.style.animation = 'a11y-pulse 1s ease-in-out infinite';
+
+                    // Inject animation keyframes
+                    if (!document.getElementById('a11y-highlight-style')) {{
+                        const style = document.createElement('style');
+                        style.id = 'a11y-highlight-style';
+                        style.textContent = `
+                            @keyframes a11y-pulse {{
+                                0%, 100% {{ filter: brightness(1); }}
+                                50% {{ filter: brightness(1.3); }}
+                            }}
+                        `;
+                        document.head.appendChild(style);
+                    }}
+                }}
+            """)
+
+            # Wait for styling to apply and animation to start
+            page.wait_for_timeout(300)
+
+            # Intelligent screenshot sizing
+            try:
+                # Get element bounding box
+                box = locator.bounding_box()
+                if box:
+                    # Ensure minimum dimensions with generous padding for highlights
+                    min_width = 300
+                    min_height = 150
+                    # Large padding to capture outline (12px) + box-shadow glow (30px) + context (60px)
+                    padding = 100
+
+                    # Calculate capture area with padding
+                    width = max(box["width"] + padding * 2, min_width)
+                    height = max(box["height"] + padding * 2, min_height)
+
+                    # Center the element in the capture
+                    x = max(0, box["x"] - padding)
+                    y = max(0, box["y"] - padding)
+
+                    # Use viewport clip for better context
+                    page.screenshot(
+                        path=str(screenshot_path),
+                        clip={"x": x, "y": y, "width": width, "height": height}
+                    )
+                else:
+                    # Fallback to element screenshot
+                    locator.screenshot(path=str(screenshot_path))
+
                 logger.info(
-                    "Captured element screenshot for violation '%s' at %s",
+                    "Captured highlighted screenshot for violation '%s' (highlight color: %s) at %s",
                     violation["id"],
+                    highlight_color,
                     screenshot_path,
                 )
+                return str(screenshot_path)
+
             except Exception as element_error:
                 logger.debug(
-                    "Element screenshot failed for '%s', using full-page: %s",
+                    "Element screenshot failed for '%s', using viewport: %s",
                     selector,
                     element_error,
                 )
-                # No selector/CSS injection here; just capture the current page.
-                page.screenshot(path=str(screenshot_path))
+                # Try viewport screenshot
+                page.screenshot(path=str(screenshot_path), full_page=False)
                 logger.info(
-                    "Captured full-page screenshot for violation '%s' at %s",
+                    "Captured viewport screenshot for violation '%s' at %s",
                     violation["id"],
                     screenshot_path,
                 )
-            return str(screenshot_path)
+                return str(screenshot_path)
+
         except Exception as e:
             logger.error(
-                "Failed to capture screenshot for selector '%s': %s", selector, e
+                "Failed to capture screenshot for selector '%s': %s",
+                selector, e
             )
             return None
 
