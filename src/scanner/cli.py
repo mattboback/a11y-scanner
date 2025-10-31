@@ -81,7 +81,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     # live
     sp = sub.add_parser("live", help="Scan live URLs (set base URL and optional pages)")
-    sp.add_argument("--base-url", type=str, required=True, help="Base URL e.g. https://example.com")
+    sp.add_argument(
+        "--base-url", type=str, required=True, help="Base URL e.g. https://example.com"
+    )
     sp.add_argument(
         "--pages",
         type=str,
@@ -94,7 +96,9 @@ def build_parser() -> argparse.ArgumentParser:
     sp.set_defaults(func=cmd_live)
 
     # report (local build)
-    sp = sub.add_parser("report", help="Build a consolidated HTML+JSON report from results/")
+    sp = sub.add_parser(
+        "report", help="Build a consolidated HTML+JSON report from results/"
+    )
     sp.add_argument("--project-root", type=Path, default=None)
     sp.add_argument("--results-dir", type=Path, default=None)
     sp.add_argument("--output", type=Path, default=None)
@@ -112,4 +116,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

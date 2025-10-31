@@ -41,7 +41,6 @@ def temp_dirs():
     """Create temporary directories for testing"""
 
     with tempfile.TemporaryDirectory() as temp_dir:
-
         temp_path = Path(temp_dir)
 
         results_dir = temp_path / "results"
@@ -168,7 +167,6 @@ def test_validate_report_json(temp_dirs, sample_report_data):
     valid_file = results_dir / "valid.json"
 
     with open(valid_file, "w") as f:
-
         json.dump(sample_report_data, f)
 
     assert validate_report_json(valid_file) is True
@@ -178,7 +176,6 @@ def test_validate_report_json(temp_dirs, sample_report_data):
     invalid_file = results_dir / "invalid.json"
 
     with open(invalid_file, "w") as f:
-
         f.write('["not", "a", "dict"]')
 
     assert validate_report_json(invalid_file) is False
@@ -190,7 +187,6 @@ def test_validate_report_json(temp_dirs, sample_report_data):
     invalid_file2 = results_dir / "invalid2.json"
 
     with open(invalid_file2, "w") as f:
-
         json.dump(invalid_data, f)
 
     assert validate_report_json(invalid_file2) is False
@@ -206,7 +202,6 @@ def test_build_report_success(temp_dirs, sample_report_data):
     report_file = results_dir / "sample.json"
 
     with open(report_file, "w") as f:
-
         json.dump(sample_report_data, f)
 
     # Generate report
@@ -319,7 +314,10 @@ def test_build_report_counts_multiple_nodes(temp_dirs):
                 "help": "Fix contrast",
                 "nodes": [
                     {"target": [".btn-primary"], "html": "<a class='btn-primary'>"},
-                    {"target": [".link-secondary"], "html": "<a class='link-secondary'>"},
+                    {
+                        "target": [".link-secondary"],
+                        "html": "<a class='link-secondary'>",
+                    },
                 ],
             }
         ],

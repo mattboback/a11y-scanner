@@ -115,7 +115,7 @@ make test-reporting
 
 **Format code**:
 ```bash
-black src tests
+ruff format src tests
 ```
 
 **Lint code**:
@@ -161,7 +161,7 @@ Then create a Pull Request on GitHub.
 
 ### Python Style
 
-- **Formatting**: Use Black with line length 88
+- **Formatting**: Use Ruff formatter with line length 88
 - **Linting**: Follow Ruff rules (E, F, W, I, B, UP)
 - **Type hints**: Required for all function signatures
 - **Docstrings**: Use for all public functions, classes, and modules

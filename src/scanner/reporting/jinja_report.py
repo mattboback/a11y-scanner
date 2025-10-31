@@ -488,7 +488,8 @@ def build_report(
             raise FileNotFoundError(f"Template not found: {e}") from e
 
         # Render template
-        # Compute a relative web path from the report file location to the results directory
+        # Compute a relative web path from the report file location
+        # to the results directory
         # so screenshots work when opening the report directly from the filesystem
         # (e.g., file:///.../data/reports/latest.html -> ../results/*).
         base_dir = output_html.parent.resolve()
@@ -505,7 +506,8 @@ def build_report(
                 summary_rel = os.path.relpath(summary_path, base_dir)
                 summary_web_path = summary_rel.replace(os.sep, "/")
             except ValueError:
-                # If relpath cannot be computed (different drives), fall back to filename
+                # If relpath cannot be computed (different drives),
+                # fall back to filename
                 summary_web_path = summary_path.name
 
         model_payload = model.to_dict()

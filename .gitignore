@@ -152,3 +152,4 @@ logs/
 # Keep directory structure with .gitkeep files
 !data/.gitkeep
 !tests/assets/.gitkeep
+.serena/

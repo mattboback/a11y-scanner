@@ -107,7 +107,7 @@ class PlaywrightAxeService:
 
             # Choose a maximally-visible highlight color based on element's brightness
             try:
-                avg_brightness = locator.evaluate("""
+                avg_brightness = locator.evaluate(r"""
                     (el) => {
                         const styles = window.getComputedStyle(el);
                         const bgColor = styles.backgroundColor;
@@ -247,14 +247,15 @@ class PlaywrightAxeService:
             finally:
                 # Clean up overlays regardless of capture path
                 try:
-                    page.evaluate("() => { ['a11y-highlight-overlay','a11y-highlight-badge'].forEach(id => { const n = document.getElementById(id); if (n) n.remove(); }); }")
+                    page.evaluate(
+                        "() => { ['a11y-highlight-overlay','a11y-highlight-badge'].forEach(id => { const n = document.getElementById(id); if (n) n.remove(); }); }"
+                    )
                 except Exception:
                     pass
 
         except Exception as e:
             logger.error(
-                "Failed to capture screenshot for selector '%s': %s",
-                selector, e
+                "Failed to capture screenshot for selector '%s': %s", selector, e
             )
             return None
 

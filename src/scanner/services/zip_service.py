@@ -88,14 +88,21 @@ class ZipService:
                 # Guard against zip bombs by limiting total uncompressed size
                 try:
                     MAX_UNCOMPRESSED = 500 * 1024 * 1024  # 500 MB
-                    total_uncompressed = sum(info.file_size for info in archive.infolist())
+                    total_uncompressed = sum(
+                        info.file_size for info in archive.infolist()
+                    )
                     if total_uncompressed > MAX_UNCOMPRESSED:
                         raise RuntimeError(
-                            f"Archive expands to {total_uncompressed} bytes (> {MAX_UNCOMPRESSED}). Aborting."
+
+                                f"Archive expands to {total_uncompressed} bytes "
+                                f"(> {MAX_UNCOMPRESSED}). Aborting."
+
                         )
                 except Exception:
                     # If size computation fails, continue but log a warning
-                    logger.warning("Could not compute uncompressed archive size for guard check")
+                    logger.warning(
+                        "Could not compute uncompressed archive size for guard check"
+                    )
 
                 file_list = archive.namelist()
                 logger.debug(

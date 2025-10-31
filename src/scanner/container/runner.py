@@ -9,7 +9,10 @@ from .manager import ContainerManager
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Run the a11y-scanner in a Playwright container using the Docker SDK (with caching)."
+        description=(
+            "Run the a11y-scanner in a Playwright container "
+            "using the Docker SDK (with caching)."
+        )
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -21,7 +24,10 @@ def main(argv: list[str] | None = None) -> int:
         "--project-root",
         type=Path,
         default=None,
-        help="Path to the project root (where pyproject.toml lives). Defaults to auto-discovery.",
+        help=(
+            "Path to the project root (where pyproject.toml lives). "
+            "Defaults to auto-discovery."
+        ),
     )
 
     # run scan (one-off)
@@ -32,7 +38,10 @@ def main(argv: list[str] | None = None) -> int:
         "--project-root",
         type=Path,
         default=None,
-        help="Path to the project root (where pyproject.toml lives). Defaults to auto-discovery.",
+        help=(
+            "Path to the project root (where pyproject.toml lives). "
+            "Defaults to auto-discovery."
+        ),
     )
     run.add_argument(
         "--no-cache",
@@ -53,7 +62,10 @@ def main(argv: list[str] | None = None) -> int:
         "--project-root",
         type=Path,
         default=None,
-        help="Path to the project root (where pyproject.toml lives). Defaults to auto-discovery.",
+        help=(
+            "Path to the project root (where pyproject.toml lives). "
+            "Defaults to auto-discovery."
+        ),
     )
     serve.add_argument(
         "--port",
