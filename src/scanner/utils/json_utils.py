@@ -24,13 +24,13 @@ def sanitize_for_json(obj: Any) -> Any:
         >>> sanitize_for_json({"nested": {"error": TypeError("test")}})
         {'nested': {'error': {'error': 'test', 'type': 'TypeError'}}}
     """
-    if obj is None or isinstance(obj, (str, int, float, bool)):
+    if obj is None or isinstance(obj, str | int | float | bool):
         return obj
 
     if isinstance(obj, dict):
         return {k: sanitize_for_json(v) for k, v in obj.items()}
 
-    if isinstance(obj, (list, tuple)):
+    if isinstance(obj, list | tuple):
         return [sanitize_for_json(item) for item in obj]
 
     # Handle JavaScript Error objects and other non-serializable types
