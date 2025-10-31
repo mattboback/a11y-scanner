@@ -79,10 +79,12 @@ def main():
                     continue
 
         output_html = reports_dir / "latest.html"
-        build_report(
+        report_path = build_report(
             live_results_dir, output_html, title="Accessibility Report (Live Site)"
         )
-        log.info("Consolidated HTML report generated at: %s", output_html)
+        summary_path = report_path.with_suffix(".json")
+        log.info("Consolidated HTML report generated at: %s", report_path)
+        log.info("Summary JSON generated at: %s", summary_path)
         log.info("--- Live Scan Finished ---")
 
         pages_count = len(PAGES_TO_SCAN)
@@ -93,12 +95,14 @@ def main():
             )
             print(f"Scanned {pages_count} page(s).")
             print(f"Detailed JSON reports: {live_results_dir.resolve()}")
-            print(f"HTML report available at: {output_html}")
+            print(f"HTML report available at: {report_path}")
+            print(f"Consolidated JSON summary available at: {summary_path}")
         else:
             print(
                 "\n✅ Excellent! No accessibility violations were found on the scanned pages."
             )
-            print(f"Full report available at: {output_html}")
+            print(f"Full report available at: {report_path}")
+            print(f"JSON summary available at: {summary_path}")
         sys.exit(0)
     except Exception:
         log.exception("An unexpected error occurred during the live scan.")

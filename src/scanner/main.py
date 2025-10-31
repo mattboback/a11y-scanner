@@ -63,11 +63,15 @@ def main():
         output_html = reports_dir / "latest.html"
 
         try:
-            build_report(
+            report_path = build_report(
                 settings.results_dir, output_html, title="Accessibility Report"
             )
-            log.info("Consolidated HTML report generated at: %s", output_html)
+            summary_path = report_path.with_suffix(".json")
+            log.info("Consolidated HTML report generated at: %s", report_path)
+            log.info("Summary JSON generated at: %s", summary_path)
         except Exception as e:
+            report_path = output_html.resolve()
+            summary_path = report_path.with_suffix(".json")
             log.error("Failed to generate HTML report: %s", e)
             # Continue with the rest of the execution, don't fail the entire scan
 
@@ -77,10 +81,12 @@ def main():
             print("\n--- Accessibility Scan Results ---")
             print(f"Found {len(results)} accessibility violations:")
             print(json.dumps(results, indent=2))
-            print(f"\n✅ Full HTML report available at: {output_html.resolve()}")
+            print(f"\n✅ Full HTML report available at: {report_path}")
+            print(f"📄 Consolidated JSON summary at: {summary_path}")
         else:
             print("\n✅ No accessibility violations found!")
-            print(f"Full report available at: {output_html.resolve()}")
+            print(f"Full report available at: {report_path}")
+            print(f"JSON summary available at: {summary_path}")
 
         sys.exit(0)
 

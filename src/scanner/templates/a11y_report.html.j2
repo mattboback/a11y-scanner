@@ -172,6 +172,150 @@
       border-color: var(--accent);
     }
 
+    .artifact-note {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+    }
+
+    .severity-summary {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .severity-title {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .severity-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .severity-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: capitalize;
+      background: rgba(88, 166, 255, 0.1);
+      color: var(--text);
+    }
+
+    .severity-chip .count {
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+    }
+
+    .impact-critical.severity-chip {
+      background: rgba(255, 68, 68, 0.15);
+      border-color: rgba(255, 68, 68, 0.4);
+      color: var(--critical);
+    }
+
+    .impact-serious.severity-chip {
+      background: rgba(255, 140, 0, 0.15);
+      border-color: rgba(255, 140, 0, 0.35);
+      color: var(--serious);
+    }
+
+    .impact-moderate.severity-chip {
+      background: rgba(255, 165, 0, 0.15);
+      border-color: rgba(255, 165, 0, 0.3);
+      color: var(--moderate);
+    }
+
+    .impact-minor.severity-chip {
+      background: rgba(255, 215, 0, 0.15);
+      border-color: rgba(255, 215, 0, 0.3);
+      color: var(--minor);
+    }
+
+    .impact-unknown.severity-chip {
+      background: rgba(125, 133, 144, 0.15);
+      border-color: rgba(125, 133, 144, 0.3);
+      color: var(--text-secondary);
+    }
+
+    .page-table {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .page-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.5fr);
+      gap: 1rem;
+      align-items: center;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--border-muted);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    .page-row.header {
+      background: transparent;
+      border: none;
+      padding: 0;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .page-name {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .page-label {
+      font-weight: 600;
+      color: var(--text);
+      overflow-wrap: anywhere;
+    }
+
+    .page-name a {
+      color: var(--accent);
+      font-size: 0.8rem;
+      text-decoration: none;
+    }
+
+    .page-name a:hover {
+      text-decoration: underline;
+    }
+
+    .page-total {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 52px;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      font-weight: 700;
+      background: rgba(88, 166, 255, 0.15);
+      border: 1px solid rgba(88, 166, 255, 0.3);
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .page-impacts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
     .rules {
       display: grid;
       gap: 1.25rem;
@@ -355,6 +499,10 @@
       letter-spacing: 0.05em;
     }
 
+    .why {
+      margin-top: 0.75rem;
+    }
+
     pre {
       background: var(--code-bg);
       border: 1px solid var(--code-border);
@@ -437,6 +585,15 @@
       .kpi .value {
         font-size: 2rem;
       }
+
+      .page-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+
+      .page-row.header {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -444,7 +601,9 @@
   <div class="container">
     <header>
       <h1>{{ model.title }}</h1>
-      <div class="meta">Generated {{ model.generated_at }}</div>
+      <div class="meta">
+        <time datetime="{{ model.generated_at }}">{{ model.generated_at }}</time>
+      </div>
     </header>
 
     <section class="card">
@@ -452,12 +611,12 @@
       <div class="summary">
         <div class="kpi">
           <div class="label">Pages Scanned</div>
-          <div class="value">{{ model.pages_scanned }}</div>
+          <div class="value"><span id="pages-scanned">{{ model.pages_scanned }}</span></div>
         </div>
         <div class="kpi">
           <div class="label">Total Violations</div>
           <div class="value {% if model.total_violations == 0 %}status-ok{% elif model.total_violations < 10 %}status-warn{% else %}status-bad{% endif %}">
-            {{ model.total_violations }}
+            <span id="total-violations">{{ model.total_violations }}</span>
           </div>
         </div>
         <div class="kpi">
@@ -466,17 +625,73 @@
         </div>
       </div>
 
-      {% if model.raw_files %}
+      {% if summary_json or model.raw_files %}
       <div class="raw-files">
-        <div class="raw-files-title">Raw JSON Reports</div>
+        <div class="raw-files-title">Artifacts</div>
         <div class="raw-list">
+          {% if summary_json %}
+          <a href="{{ summary_json }}" target="_blank" rel="noopener">Consolidated summary (JSON)</a>
+          {% endif %}
           {% for f in model.raw_files %}
           <a href="{{ results_web_base }}/{{ f }}" target="_blank" rel="noopener">{{ f }}</a>
+          {% endfor %}
+        </div>
+        {% if summary_json %}
+        <p class="artifact-note">Includes aggregated counts, per-rule details, and page summaries.</p>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if model.total_violations > 0 %}
+      <div class="severity-summary">
+        <div class="severity-title">Violations by Impact</div>
+        <div class="severity-chips">
+          {% for impact, count in model.impact_summary.items() if count > 0 %}
+            <span class="severity-chip impact-{{ impact }}">
+              {{ impact.replace('_', ' ') | title }}
+              <span class="count">{{ count }}</span>
+            </span>
           {% endfor %}
         </div>
       </div>
       {% endif %}
     </section>
+
+    {% if model.total_violations > 0 and model.page_summaries %}
+    <section class="card">
+      <div class="section-title">Pages With Violations ({{ model.page_summaries|length }})</div>
+      <div class="page-table">
+        <div class="page-row header">
+          <div>Page</div>
+          <div>Violations</div>
+          <div>Impact Mix</div>
+        </div>
+        {% for page in model.page_summaries %}
+        <div class="page-row">
+          <div class="page-name">
+            <span class="page-label">{{ page.label }}</span>
+            {% if page.url %}
+            <a href="{{ page.url }}" target="_blank" rel="noopener">Open page →</a>
+            {% endif %}
+          </div>
+          <div class="page-total">{{ page.total_violations }}</div>
+          <div class="page-impacts">
+            {% if page.impact_counts %}
+              {% for impact, count in page.impact_counts.items() %}
+              <span class="severity-chip impact-{{ impact }}">
+                {{ impact.replace('_', ' ') | title }}
+                <span class="count">{{ count }}</span>
+              </span>
+              {% endfor %}
+            {% else %}
+              <span class="artifact-note">Impact details unavailable</span>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
 
     {% if model.total_violations == 0 %}
     <section class="card">
@@ -534,6 +749,13 @@
               <div class="snippet">
                 <div class="snippet-label">HTML Snippet</div>
                 <pre><code>{{ occ.html_snippet | e }}</code></pre>
+              </div>
+              {% endif %}
+
+              {% if occ.failure_summary %}
+              <div class="why">
+                <div class="snippet-label">Why It Fails</div>
+                <pre><code>{{ occ.failure_summary | e }}</code></pre>
               </div>
               {% endif %}
 

@@ -8,7 +8,7 @@ version = "0.4.0"
 description = "A containerized web accessibility scanner using Playwright and axe-core for comprehensive WCAG compliance testing."
 readme = "README.md"
 requires-python = ">=3.10"
-license = {text = "MIT"}
+license = {file = "LICENSE"}
 authors = [{ name = "Matt", email = "matthewboback@gmail.com" }]
 keywords = [
     "accessibility",
@@ -53,7 +53,9 @@ test = [
     "pyfakefs==5.7.2",
     "pytest-cov==6.0.0",
     "requests==2.32.3",
-    "httpx==0.28.1"
+    "httpx==0.28.1",
+    "beautifulsoup4==4.12.3",
+    "lxml==5.3.0",
 ]
 dev = [
     "a11y-scanner[test]",
@@ -69,6 +71,7 @@ scanner = "scanner.main:main"
 scanner-docker = "scanner.container.runner:main"
 scanner-integration = "scanner.container.integration:main"
 scanner-api = "scanner.web.server:run"
+a11y = "scanner.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/mattboback/a11y-scanner"
@@ -87,8 +90,10 @@ target-version = ["py310"]
 [tool.ruff]
 line-length = 88
 target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP"]
-exclude = ["tests"]
 
 [tool.pytest.ini_options]
 addopts = "-ra -q --strict-markers --cov=src --cov-report=html"

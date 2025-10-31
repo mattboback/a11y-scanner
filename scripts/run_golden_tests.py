@@ -188,48 +188,22 @@ def generate_golden_file(site_name: str, project_root: Path) -> bool:
 
 
 def generate_html_report(site_name: str, project_root: Path) -> bool:
-    """
-    Generate HTML report from scan results.
-
-    Uses the Jinja report generator to create an HTML report.
-    """
+    """Generate a consolidated HTML (and JSON) report using the in-repo API."""
     try:
+        sys.path.insert(0, str(project_root / "src"))
+        from scanner.reporting.jinja_report import build_report
+
         reports_dir = project_root / "data" / "reports"
         reports_dir.mkdir(parents=True, exist_ok=True)
+        results_dir = project_root / "data" / "results"
+        latest_report = reports_dir / "latest.html"
 
         logger.info(f"Generating HTML report for {site_name}...")
+        build_report(results_dir, latest_report, "Accessibility Scan Report")
+        logger.info("✓ HTML report generated")
 
-        # Run the Jinja report generator
-        latest_report = project_root / "data" / "reports" / "latest.html"
-        result = subprocess.run(
-            [
-                "uv",
-                "run",
-                "python",
-                "-c",
-                f"""
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path('{project_root}') / 'src'))
-from scanner.reporting.jinja_report import build_report
-results_dir = Path('{project_root}') / 'data' / 'results'
-output_html = Path('{latest_report}')
-build_report(results_dir, output_html, 'Accessibility Scan Report')
-""",
-            ],
-            cwd=project_root,
-            capture_output=True,
-            text=True,
-            timeout=60,
-        )
+        summary_report = latest_report.with_suffix(".json")
 
-        if result.returncode != 0:
-            logger.warning(f"HTML report generation had issues: {result.stderr}")
-            # Don't fail - report might still exist
-        else:
-            logger.info(f"✓ HTML report generated")
-
-        # Copy report to site-specific location
         if latest_report.exists():
             site_report = (
                 project_root
@@ -239,11 +213,14 @@ build_report(results_dir, output_html, 'Accessibility Scan Report')
             )
             shutil.copy(latest_report, site_report)
             logger.info(f"✓ Saved report: {site_report}")
-            return True
-        else:
-            logger.warning(f"No report generated for {site_name}")
-            return False
 
+            if summary_report.exists():
+                site_summary = site_report.with_suffix(".json")
+                shutil.copy(summary_report, site_summary)
+                logger.info(f"✓ Saved summary: {site_summary}")
+            return True
+        logger.warning(f"No report generated for {site_name}")
+        return False
     except Exception as e:
         logger.error(f"Error generating HTML report for {site_name}: {e}")
         return False

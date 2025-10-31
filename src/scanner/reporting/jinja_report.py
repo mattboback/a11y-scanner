@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import sys
+from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -18,6 +19,8 @@ from jinja2 import (
 )
 
 logger = logging.getLogger(__name__)
+
+IMPACT_LEVELS = ("critical", "serious", "moderate", "minor", "unknown")
 
 
 @dataclass
@@ -34,6 +37,8 @@ class Occurrence:
 
     screenshot_filename: str | None = None
 
+    failure_summary: str | None = None
+
     def __post_init__(self):
         """Extract filename from screenshot_path for template use"""
 
@@ -43,6 +48,28 @@ class Occurrence:
 
             except Exception:
                 self.screenshot_filename = str(self.screenshot_path)
+
+    def to_dict(self) -> dict[str, str | None]:
+        """Return a JSON-serializable representation of this occurrence"""
+
+        path_str = None
+
+        if self.screenshot_path:
+            try:
+                path_str = str(self.screenshot_path)
+
+            except Exception:
+                path_str = self.screenshot_path  # already str / fallback
+
+        return {
+            "url": self.url,
+            "source_file": self.source_file,
+            "selector": self.selector,
+            "html_snippet": self.html_snippet,
+            "screenshot_path": path_str,
+            "screenshot_filename": self.screenshot_filename,
+            "failure_summary": self.failure_summary,
+        }
 
 
 @dataclass
@@ -70,6 +97,42 @@ class RuleGroup:
 
         return f"impact-{self.impact.lower()}"
 
+    def to_dict(self) -> dict:
+        """Return a JSON-serializable representation of this rule group"""
+
+        return {
+            "id": self.id,
+            "impact": self.impact,
+            "description": self.description,
+            "help": self.help,
+            "helpUrl": self.helpUrl,
+            "count": self.count,
+            "occurrences": [occ.to_dict() for occ in self.occurrences],
+        }
+
+
+@dataclass
+class PageSummary:
+    """Aggregated view of violations per page."""
+
+    label: str
+
+    url: str
+
+    total_violations: int
+
+    impact_counts: dict[str, int] = field(default_factory=dict)
+
+    def to_dict(self) -> dict:
+        """Return a JSON-serializable representation of this page summary"""
+
+        return {
+            "label": self.label,
+            "url": self.url,
+            "total_violations": self.total_violations,
+            "impact_counts": dict(self.impact_counts),
+        }
+
 
 @dataclass
 class ReportModel:
@@ -85,6 +148,10 @@ class ReportModel:
 
     raw_files: list[str]
 
+    impact_summary: dict[str, int] = field(default_factory=dict)
+
+    page_summaries: list[PageSummary] = field(default_factory=list)
+
     def validate(self) -> bool:
         """Validate the report model has reasonable values"""
 
@@ -98,6 +165,23 @@ class ReportModel:
             return False
 
         return True
+
+    def to_dict(self) -> dict:
+        """Return a JSON-serializable representation of the report model"""
+
+        page_payload = [page.to_dict() for page in self.page_summaries]
+
+        return {
+            "title": self.title,
+            "generated_at": self.generated_at,
+            "pages_scanned": self.pages_scanned,
+            "total_violations": self.total_violations,
+            "raw_files": list(self.raw_files),
+            "impact_summary": dict(self.impact_summary),
+            "rules": [rule.to_dict() for rule in self.by_rule],
+            "page_summaries": page_payload,
+            "pages": page_payload,
+        }
 
 
 def _iter_reports(results_dir: Path):
@@ -152,86 +236,136 @@ def _build_model(results_dir: Path, title: str) -> ReportModel:
 
     raw_files: list[str] = []
 
+    impact_summary: defaultdict[str, int] = defaultdict(int)
+
+    page_buckets: dict[str, dict] = {}
+
     for fname, report in _iter_reports(results_dir):
         raw_files.append(fname)
 
         pages_scanned += 1
 
-        violations = (report or {}).get("violations", [])
+        report = report or {}
 
-        for v in violations:
-            total_violations += 1
+        scanned_url = report.get("scanned_url") or report.get("url") or ""
 
-            rid = v.get("id") or "unknown"
+        source_file = None
 
-            # Create or get existing rule group
+        if "source_file" in report:
+            source_file = report["source_file"]
+
+        elif scanned_url and str(scanned_url).startswith("file://"):
+            # Try to extract filename from file:// URL
+            try:
+                url_parts = str(scanned_url).split("file://")[-1]
+                source_file = Path(url_parts).name
+            except Exception:
+                source_file = None
+
+        violations = report.get("violations") or []
+
+        for violation in violations:
+            rid = violation.get("id") or "unknown"
 
             if rid not in groups:
                 groups[rid] = RuleGroup(
                     id=rid,
-                    impact=v.get("impact"),
-                    description=v.get("description"),
-                    help=v.get("help"),
-                    helpUrl=v.get("helpUrl"),
+                    impact=violation.get("impact"),
+                    description=violation.get("description"),
+                    help=violation.get("help"),
+                    helpUrl=violation.get("helpUrl"),
                 )
 
             grp = groups[rid]
 
-            # Extract violation details
+            nodes = violation.get("nodes") or []
 
-            selector = None
+            if not nodes:
+                nodes = [None]
 
-            html_snippet = None
+            impact_value = violation.get("impact") or "unknown"
 
-            nodes = v.get("nodes") or []
+            impact_key = str(impact_value).lower()
 
-            if nodes:
-                n0 = nodes[0]
+            screenshot_path = violation.get("screenshot_path")
 
-                target = n0.get("target") or []
+            for node in nodes:
+                selector = None
+                html_snippet = None
+                failure_summary = None
 
-                selector = target[0] if len(target) > 0 else None
+                if isinstance(node, dict):
+                    target = node.get("target") or []
+                    if target:
+                        selector = ", ".join(str(t) for t in target)
 
-                html_snippet = n0.get("html")
+                    html_snippet = node.get("html")
+                    failure_summary = node.get("failureSummary")
 
-            # Get source_file from report if available
+                occ = Occurrence(
+                    url=scanned_url,
+                    source_file=source_file,
+                    selector=selector,
+                    html_snippet=html_snippet,
+                    screenshot_path=screenshot_path,
+                    failure_summary=failure_summary,
+                )
 
-            source_file = None
+                grp.count += 1
+                grp.occurrences.append(occ)
 
-            if "source_file" in report:
-                source_file = report["source_file"]
+                total_violations += 1
+                impact_summary[impact_key] += 1
 
-            elif "scanned_url" in report and "file://" in str(report["scanned_url"]):
-                # Try to extract filename from file:// URL
+                page_key = source_file or scanned_url or fname
 
-                try:
-                    url_parts = str(report["scanned_url"]).split("file://")[-1]
+                bucket = page_buckets.setdefault(
+                    page_key,
+                    {
+                        "label": source_file or scanned_url or fname,
+                        "url": scanned_url,
+                        "total": 0,
+                        "impact_counts": defaultdict(int),
+                    },
+                )
 
-                    source_file = Path(url_parts).name
-
-                except Exception:
-                    source_file = None
-
-            # Create occurrence with screenshot handling
-
-            screenshot_path = v.get("screenshot_path")
-
-            occ = Occurrence(
-                url=report.get("scanned_url") or report.get("url") or "",
-                source_file=source_file,
-                selector=selector,
-                html_snippet=html_snippet,
-                screenshot_path=screenshot_path,
-            )
-
-            grp.count += 1
-
-            grp.occurrences.append(occ)
+                bucket["total"] += 1
+                bucket["impact_counts"][impact_key] += 1
 
     # Sort rule groups by impact (critical first) then by ID
 
+    for grp in groups.values():
+        grp.occurrences.sort(
+            key=lambda occ: (
+                occ.source_file or occ.url or "",
+                occ.selector or "",
+            )
+        )
+
     sorted_groups = sorted(
         groups.values(), key=lambda g: _impact_sort_key(g.impact, g.id)
+    )
+
+    ordered_impact_summary = {
+        level: impact_summary.get(level, 0) for level in IMPACT_LEVELS
+    }
+
+    page_summaries = sorted(
+        (
+            PageSummary(
+                label=bucket["label"],
+                url=bucket["url"],
+                total_violations=bucket["total"],
+                impact_counts={
+                    level: count
+                    for level in IMPACT_LEVELS
+                    if (count := bucket["impact_counts"].get(level, 0)) > 0
+                },
+            )
+            for bucket in page_buckets.values()
+        ),
+        key=lambda p: p.total_violations,
+        reverse=True,
     )
 
     model = ReportModel(
@@ -241,6 +375,8 @@ def _build_model(results_dir: Path, title: str) -> ReportModel:
         total_violations=total_violations,
         by_rule=sorted_groups,
         raw_files=raw_files,
+        impact_summary=ordered_impact_summary,
+        page_summaries=page_summaries,
     )
 
     return model
@@ -283,6 +419,8 @@ def build_report(
     output_html: Path,
     title: str = "Accessibility Report",
     overwrite: bool = True,
+    save_json: bool = True,
+    output_json: Path | None = None,
 ) -> Path:
     """Aggregate JSON artifacts in ``results_dir`` and render a single HTML report.
 
@@ -297,6 +435,9 @@ def build_report(
 
         overwrite: Whether to overwrite existing report (default: True)
 
+        save_json: Whether to save a consolidated JSON summary alongside the HTML
+
+        output_json: Optional explicit path for the consolidated JSON summary
 
     Returns:
 
@@ -321,6 +462,8 @@ def build_report(
         return output_html
 
     results_dir = results_dir.resolve()
+
+    output_html = output_html.resolve()
 
     output_html.parent.mkdir(parents=True, exist_ok=True)
 
@@ -353,7 +496,29 @@ def build_report(
         # Normalize to POSIX-style separators for browsers
         results_web_base = rel.replace(os.sep, "/")
 
-        html = tpl.render(model=model, results_web_base=results_web_base)
+        summary_path: Path | None = None
+        summary_web_path: str | None = None
+
+        if save_json:
+            summary_path = (output_json or output_html.with_suffix(".json")).resolve()
+            try:
+                summary_rel = os.path.relpath(summary_path, base_dir)
+                summary_web_path = summary_rel.replace(os.sep, "/")
+            except ValueError:
+                # If relpath cannot be computed (different drives), fall back to filename
+                summary_web_path = summary_path.name
+
+        model_payload = model.to_dict()
+        model_payload["results_dir"] = str(results_dir)
+        model_payload["report_path"] = str(output_html)
+        if summary_path:
+            model_payload["summary_json_path"] = str(summary_path)
+
+        html = tpl.render(
+            model=model,
+            results_web_base=results_web_base,
+            summary_json=summary_web_path,
+        )
 
         # Write to file
 
@@ -367,6 +532,20 @@ def build_report(
 
         except Exception as e:
             raise RuntimeError(f"Failed to write report: {e}") from e
+
+        if save_json and summary_path:
+            try:
+                summary_path.parent.mkdir(parents=True, exist_ok=True)
+                summary_path.write_text(
+                    json.dumps(model_payload, indent=2), encoding="utf-8"
+                )
+                logger.info("Summary JSON generated: %s", summary_path)
+
+            except PermissionError as e:
+                raise PermissionError(f"Cannot write to {summary_path}: {e}") from e
+
+            except Exception as e:
+                raise RuntimeError(f"Failed to write summary JSON: {e}") from e
 
         return output_html
 

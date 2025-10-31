@@ -307,6 +307,25 @@ class ContainerManager:
             f"{CACHED_VENV_PATH}/bin/python -m scanner.web.server'"
         )
 
+    def _command_live_uncached(self) -> str:
+        return (
+            "bash -lc '"
+            "set -euo pipefail;"
+            "apt-get update -y && "
+            "apt-get install -y --no-install-recommends python3-venv && "
+            "python3 -m venv /tmp/venv && "
+            "rm -rf /tmp/src && mkdir -p /tmp/src && "
+            "cp -a /worksrc/. /tmp/src && rm -rf /tmp/src/data && "
+            "/tmp/venv/bin/pip install --no-cache-dir /tmp/src && "
+            "cd /worksrc && /tmp/venv/bin/python scan_live_site.py'"
+        )
+
+    def _command_live_cached(self) -> str:
+        return (
+            f"bash -lc 'set -e; cd /worksrc; "
+            f"{CACHED_VENV_PATH}/bin/python scan_live_site.py'"
+        )
+
     def run_scanner(
         self,
         use_cache: bool = True,
@@ -477,4 +496,75 @@ class ContainerManager:
             except Exception:
                 pass
         print(f"[container] API server exit code: {code}")
+        return code
+
+    # ---------- live scan (URLs) ----------
+
+    def run_live_scan(
+        self,
+        use_cache: bool = True,
+        rebuild_cache: bool = False,
+        stream_logs: bool = True,
+        extra_env: dict[str, str] | None = None,
+    ) -> int:
+        self._prepare_host_dirs()
+
+        if use_cache:
+            if rebuild_cache or not self.cached_image_exists():
+                self.prepare_cached_image()
+            _, _, image_ref = self._cached_image_ref()
+            cached = True
+            command = self._command_live_cached()
+        else:
+            self.ensure_base_image()
+            image_ref = self.config.base_image
+            cached = False
+            command = self._command_live_uncached()
+
+        volumes = self._volumes()
+        env = dict(self.config.env or {})
+        env[IN_CONTAINER_ENV] = IN_CONTAINER_VALUE
+        if extra_env:
+            env.update(extra_env)
+
+        if cached:
+            uid, gid = self._host_uid_gid()
+            user = f"{uid}:{gid}" if uid is not None and gid is not None else None
+        else:
+            user = "root"
+
+        print(f"[container] Starting live scan container (image: {image_ref})...")
+        run_kwargs = dict(
+            command=command,
+            working_dir=self.container_workdir,
+            environment=env,
+            user=user,
+            volumes=volumes,
+            detach=True,
+            auto_remove=False,
+        )
+        if not self._is_podman and self.config.shm_size:
+            run_kwargs["shm_size"] = self.config.shm_size
+        container = self.client.containers.run(image_ref, **run_kwargs)
+
+        if stream_logs:
+            try:
+                for line in container.logs(stream=True, follow=True):
+                    sys.stdout.buffer.write(line)
+                    sys.stdout.flush()
+            except KeyboardInterrupt:
+                print("\n[container] Interrupted by user, stopping container...")
+                container.stop(timeout=5)
+
+        try:
+            status = container.wait()
+            code = int(status.get("StatusCode", 1))
+        except Exception:
+            code = 0
+        finally:
+            try:
+                container.remove(force=True)
+            except Exception:
+                pass
+        print(f"[container] Exit code: {code}")
         return code

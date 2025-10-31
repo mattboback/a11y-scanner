@@ -31,7 +31,7 @@ Perfect for developers, QA teams, and accessibility specialists who need automat
 - **Browser-based Testing**: Real browser rendering via Playwright (Chromium/Firefox/WebKit)
 - **axe-core Integration**: Industry-standard WCAG 2.1 Level A/AA rule engine
 - **Visual Evidence**: Automatic screenshots of violating elements with red highlighting
-- **JSON + HTML Reports**: Machine-readable data and human-friendly visualizations
+- **JSON Summary + HTML Reports**: Machine-readable aggregation alongside rich visualizations
 - **Browser Reuse**: Context manager pattern for 40-80% faster multi-page scans
 
 ### Security Features
@@ -98,8 +98,8 @@ EOF
 # Package as ZIP
 cd data/unzip && zip -r ../site.zip . && cd ../..
 
-# Run the scan
-python -m scanner.container.runner run
+# Run a scan (friendly CLI)
+a11y scan --zip-path data/unzip/site.zip
 
 # View the report
 open data/reports/latest.html  # macOS
@@ -138,6 +138,7 @@ A11Y_NO_SCREENSHOTS=1 python -m scanner.container.runner run
 ✓ Scanned 3 pages
 ⚠ Found 12 violations
 ✓ Report: data/reports/latest.html
+✓ Summary: data/reports/latest.json
 ```
 
 ### Mode 2: API Server
@@ -146,6 +147,7 @@ Long-running service for programmatic access:
 
 ```bash
 # Start the API server (runs on port 8008)
+a11y prepare  # one-time
 python -m scanner.container.runner serve
 
 # In another terminal, scan via API
@@ -179,14 +181,11 @@ curl -X POST http://localhost:8008/api/scan/zip \
 
 ### Mode 3: Scan Live URLs
 
-Scan a running website:
+Scan a running website via the friendly CLI:
 
 ```bash
-# Single URL
-python scan_live_site.py https://example.com
-
-# Multiple pages (coming soon)
-# python scan_live_site.py https://example.com/page1 https://example.com/page2
+# Single URL with optional comma-separated paths
+a11y live --base-url https://example.com --pages "/,/about,/contact"
 ```
 
 ---

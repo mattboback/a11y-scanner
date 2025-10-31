@@ -223,6 +223,19 @@ def test_build_report_success(temp_dirs, sample_report_data):
 
     assert output_file.stat().st_size > 0
 
+    summary_file = result.with_suffix(".json")
+
+    assert summary_file.exists()
+
+    summary_data = json.loads(summary_file.read_text())
+
+    assert summary_data["total_violations"] == 1
+    assert summary_data["impact_summary"]["critical"] == 1
+    assert summary_data["rules"][0]["id"] == "image-alt"
+    assert summary_data["rules"][0]["count"] == 1
+    assert len(summary_data["rules"][0]["occurrences"]) == 1
+    assert summary_data["pages"][0]["total_violations"] == 1
+
     # Check content
 
     content = output_file.read_text()
@@ -234,6 +247,7 @@ def test_build_report_success(temp_dirs, sample_report_data):
     assert "Pages Scanned" in content
 
     assert "Total Violations" in content
+    assert "Consolidated summary (JSON)" in content
 
 
 def test_build_report_no_results_dir(temp_dirs):
@@ -253,6 +267,11 @@ def test_build_report_no_results_dir(temp_dirs):
 
     assert output_file.exists()
 
+    summary_file = result.with_suffix(".json")
+    assert summary_file.exists()
+    summary_data = json.loads(summary_file.read_text())
+    assert summary_data["total_violations"] == 0
+
 
 def test_build_report_no_json_files(temp_dirs):
     """Test build_report with no JSON files in results directory"""
@@ -269,6 +288,11 @@ def test_build_report_no_json_files(temp_dirs):
 
     assert output_file.exists()
 
+    summary_file = result.with_suffix(".json")
+    assert summary_file.exists()
+    summary_data = json.loads(summary_file.read_text())
+    assert summary_data["total_violations"] == 0
+
     # Check that it's a valid HTML file with "No accessibility violations"
 
     content = output_file.read_text()
@@ -276,3 +300,44 @@ def test_build_report_no_json_files(temp_dirs):
     assert "Empty Report" in content
 
     assert "No accessibility violations" in content
+
+
+def test_build_report_counts_multiple_nodes(temp_dirs):
+    """Ensure violations with multiple nodes are counted accurately."""
+
+    results_dir, reports_dir = temp_dirs
+
+    report_file = results_dir / "sample.json"
+    report_payload = {
+        "scanned_url": "http://localhost:8000/about.html",
+        "source_file": "about.html",
+        "violations": [
+            {
+                "id": "color-contrast",
+                "impact": "serious",
+                "description": "Elements must have sufficient color contrast",
+                "help": "Fix contrast",
+                "nodes": [
+                    {"target": [".btn-primary"], "html": "<a class='btn-primary'>"},
+                    {"target": [".link-secondary"], "html": "<a class='link-secondary'>"},
+                ],
+            }
+        ],
+    }
+
+    report_file.write_text(json.dumps(report_payload))
+
+    output_file = reports_dir / "report.html"
+    result = build_report(results_dir, output_file)
+
+    summary_file = result.with_suffix(".json")
+    summary_data = json.loads(summary_file.read_text())
+
+    assert summary_data["total_violations"] == 2
+    assert summary_data["impact_summary"]["serious"] == 2
+    rule = summary_data["rules"][0]
+    assert rule["count"] == 2
+    assert len(rule["occurrences"]) == 2
+
+    content = output_file.read_text()
+    assert "2 occurrences" in content

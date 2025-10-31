@@ -128,18 +128,28 @@ ruff check src tests
 ruff check src tests --fix
 ```
 
-### 5. Update Documentation
+### 5. Run the Release Prep Script (Optional)
+
+Before pushing a significant change set, run the bundled helper script to refresh the lockfile, regenerate reports, and execute the full check suite:
+
+```bash
+scripts/prepare_release.sh
+```
+
+The script requires [`uv`](https://github.com/astral-sh/uv) and respects the existing lockfile.
+
+### 6. Update Documentation
 
 If you've made changes that affect usage:
 - Update `README.md`
 - Update relevant files in `docs/`
 - Add entries to `CHANGELOG.md` under `[Unreleased]`
 
-### 6. Commit Your Changes
+### 7. Commit Your Changes
 
 See [Commit Guidelines](#commit-guidelines) below.
 
-### 7. Push and Create Pull Request
+### 8. Push and Create Pull Request
 
 ```bash
 git push origin feature/your-feature-name

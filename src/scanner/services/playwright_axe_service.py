@@ -27,6 +27,13 @@ class PlaywrightAxeService:
         self._managed = False
         # Feature flag: allow disabling screenshots in sensitive environments
         self._screenshots_enabled = os.environ.get("A11Y_NO_SCREENSHOTS", "0") != "1"
+        # Tunables for screenshot sizing
+        try:
+            self._shot_scale = float(os.environ.get("A11Y_SCREENSHOT_SCALE", "2"))
+        except ValueError:
+            self._shot_scale = 2.0
+        self._shot_min_w = int(os.environ.get("A11Y_SCREENSHOT_MIN_WIDTH", "300"))
+        self._shot_min_h = int(os.environ.get("A11Y_SCREENSHOT_MIN_HEIGHT", "200"))
 
     def __enter__(self):
         self.start()
@@ -104,93 +111,112 @@ class PlaywrightAxeService:
                     (el) => {
                         const styles = window.getComputedStyle(el);
                         const bgColor = styles.backgroundColor;
-
-                        // Parse RGB from computed style
-                        const match = bgColor.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
-                        if (!match) return 128;
-
+                        const match = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+                        if (!match) return 255; // assume light background
                         const r = parseInt(match[1]);
                         const g = parseInt(match[2]);
                         const b = parseInt(match[3]);
-
-                        // Calculate perceived brightness (0-255)
                         return (r * 0.299 + g * 0.587 + b * 0.114);
                     }
                 """)
 
-                # Choose OBNOXIOUS color based on brightness
-                if avg_brightness > 128:
-                    # Light background → Use dark, saturated color
-                    highlight_color = "rgb(255, 0, 255)"  # Bright magenta
-                else:
-                    # Dark background → Use bright, saturated color
-                    highlight_color = "rgb(0, 255, 255)"  # Bright cyan
-
+                # Vibrant contrasting color for strong visibility
+                highlight_color = "#00ffff" if avg_brightness <= 128 else "#ff00ff"
             except Exception:
-                # Fallback to bright magenta
-                highlight_color = "rgb(255, 0, 255)"
+                highlight_color = "#ff00ff"
 
-            # Apply OBNOXIOUS multi-layer highlighting
-            locator.evaluate(f"""
-                (el) => {{
-                    const highlightColor = '{highlight_color}';
+            # Compute a visible rectangle in viewport coordinates (fallback to nearest sized ancestor)
+            rect = locator.evaluate(
+                """
+                (el) => {
+                    let n = el;
+                    for (let i = 0; i < 5 && n; i++) {
+                        const r = n.getBoundingClientRect();
+                        if (r && r.width >= 4 && r.height >= 4) {
+                            return { left: r.left, top: r.top, width: r.width, height: r.height };
+                        }
+                        n = n.parentElement;
+                    }
+                    const r = el.getBoundingClientRect();
+                    return { left: r.left, top: r.top, width: Math.max(4, r.width), height: Math.max(4, r.height) };
+                }
+                """
+            )
 
-                    // Multi-layer obnoxious highlighting
-                    el.style.outline = `8px solid ${{highlightColor}}`;
-                    el.style.outlineOffset = '4px';
-                    el.style.boxShadow = `
-                        0 0 0 12px ${{highlightColor}}40,
-                        0 0 0 16px ${{highlightColor}}30,
-                        0 0 30px 10px ${{highlightColor}}60,
-                        inset 0 0 0 3px ${{highlightColor}}
-                    `;
-                    el.style.position = 'relative';
-                    el.style.zIndex = '999999';
-
-                    // Add pulsing animation for extra obnoxiousness
-                    el.style.animation = 'a11y-pulse 1s ease-in-out infinite';
-
-                    // Inject animation keyframes
-                    if (!document.getElementById('a11y-highlight-style')) {{
-                        const style = document.createElement('style');
-                        style.id = 'a11y-highlight-style';
-                        style.textContent = `
-                            @keyframes a11y-pulse {{
-                                0%, 100% {{ filter: brightness(1); }}
-                                50% {{ filter: brightness(1.3); }}
-                            }}
-                        `;
-                        document.head.appendChild(style);
-                    }}
-                }}
-            """)
+            # Add an overlay outside clipping contexts so it's always visible
+            page.evaluate(
+                """
+                ({ rect, color, label }) => {
+                    const id = 'a11y-highlight-overlay';
+                    const bid = 'a11y-highlight-badge';
+                    const mk = (tag, id) => { let el = document.getElementById(id); if (!el) { el = document.createElement(tag); el.id = id; document.body.appendChild(el);} return el; };
+                    const el = mk('div', id);
+                    Object.assign(el.style, {
+                        position: 'fixed',
+                        left: `${rect.left}px`,
+                        top: `${rect.top}px`,
+                        width: `${rect.width}px`,
+                        height: `${rect.height}px`,
+                        outline: `8px solid ${color}`,
+                        boxShadow: `0 0 0 14px ${color}40, 0 0 28px 10px ${color}80`,
+                        borderRadius: '6px',
+                        pointerEvents: 'none',
+                        zIndex: '2147483647',
+                        transition: 'none'
+                    });
+                    const badge = mk('div', bid);
+                    badge.textContent = label || '';
+                    Object.assign(badge.style, {
+                        position: 'fixed',
+                        left: `${rect.left}px`,
+                        top: `${Math.max(0, rect.top - 24)}px`,
+                        background: color,
+                        color: '#000',
+                        font: '12px/1.2 -apple-system, system-ui, Segoe UI, Roboto, Arial',
+                        padding: '2px 6px',
+                        borderRadius: '4px',
+                        pointerEvents: 'none',
+                        zIndex: '2147483647',
+                        boxShadow: `0 2px 8px ${color}80`
+                    });
+                }
+                """,
+                {"rect": rect, "color": highlight_color, "label": violation.get("id")},
+            )
 
             # Wait for styling to apply and animation to start
             page.wait_for_timeout(300)
 
             # Intelligent screenshot sizing
             try:
-                # Get element bounding box
+                # Get element bounding box in viewport coordinates
                 box = locator.bounding_box()
                 if box:
-                    # Ensure minimum dimensions with generous padding for highlights
-                    min_width = 300
-                    min_height = 150
-                    # Large padding to capture outline (12px) + box-shadow glow (30px) + context (60px)
-                    padding = 100
+                    vw = page.viewport_size["width"] if page.viewport_size else 1280
+                    vh = page.viewport_size["height"] if page.viewport_size else 720
 
-                    # Calculate capture area with padding
-                    width = max(box["width"] + padding * 2, min_width)
-                    height = max(box["height"] + padding * 2, min_height)
+                    # Desired capture is element size times configured scale
+                    desired_w = max(self._shot_min_w, box["width"] * self._shot_scale)
+                    desired_h = max(self._shot_min_h, box["height"] * self._shot_scale)
 
-                    # Center the element in the capture
-                    x = max(0, box["x"] - padding)
-                    y = max(0, box["y"] - padding)
+                    # Clamp to viewport
+                    width = min(desired_w, vw - 2)
+                    height = min(desired_h, vh - 2)
 
-                    # Use viewport clip for better context
+                    # Center around element
+                    cx = box["x"] + box["width"] / 2
+                    cy = box["y"] + box["height"] / 2
+                    x = max(0, min(cx - width / 2, vw - width))
+                    y = max(0, min(cy - height / 2, vh - height))
+
                     page.screenshot(
                         path=str(screenshot_path),
-                        clip={"x": x, "y": y, "width": width, "height": height}
+                        clip={
+                            "x": float(x),
+                            "y": float(y),
+                            "width": float(width),
+                            "height": float(height),
+                        },
                     )
                 else:
                     # Fallback to element screenshot
@@ -218,6 +244,12 @@ class PlaywrightAxeService:
                     screenshot_path,
                 )
                 return str(screenshot_path)
+            finally:
+                # Clean up overlays regardless of capture path
+                try:
+                    page.evaluate("() => { ['a11y-highlight-overlay','a11y-highlight-badge'].forEach(id => { const n = document.getElementById(id); if (n) n.remove(); }); }")
+                except Exception:
+                    pass
 
         except Exception as e:
             logger.error(
