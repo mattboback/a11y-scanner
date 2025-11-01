@@ -4,7 +4,7 @@ import json
 import logging
 import os
 import sys
-from collections import defaultdict
+from collections import OrderedDict, defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -34,6 +34,8 @@ class Occurrence:
     html_snippet: str | None
 
     screenshot_path: str | Path | None
+
+    report_filename: str | None = None
 
     screenshot_filename: str | None = None
 
@@ -69,6 +71,7 @@ class Occurrence:
             "screenshot_path": path_str,
             "screenshot_filename": self.screenshot_filename,
             "failure_summary": self.failure_summary,
+            "report_filename": self.report_filename,
         }
 
 
@@ -84,9 +87,13 @@ class RuleGroup:
 
     helpUrl: str | None = None
 
+    tags: list[str] = field(default_factory=list)
+
     count: int = 0
 
     occurrences: list[Occurrence] = field(default_factory=list)
+
+    page_groups: list["OccurrencePageGroup"] = field(default_factory=list)
 
     @property
     def impact_class(self) -> str:
@@ -106,9 +113,65 @@ class RuleGroup:
             "description": self.description,
             "help": self.help,
             "helpUrl": self.helpUrl,
+            "tags": list(self.tags),
             "count": self.count,
             "occurrences": [occ.to_dict() for occ in self.occurrences],
+            "page_groups": [group.to_dict() for group in self.page_groups],
         }
+
+
+@dataclass
+class OccurrencePageGroup:
+    """Container for grouping occurrences by source file / page."""
+
+    key: str
+
+    label: str
+
+    url: str | None
+
+    source_file: str | None
+
+    occurrences: list[Occurrence] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        """Return JSON-serializable representation."""
+
+        return {
+            "key": self.key,
+            "label": self.label,
+            "url": self.url,
+            "source_file": self.source_file,
+            "occurrences": [occ.to_dict() for occ in self.occurrences],
+        }
+
+    @property
+    def screenshot_filename(self) -> str | None:
+        """Return first available screenshot filename for page bucket."""
+
+        for occ in self.occurrences:
+            if occ.screenshot_filename:
+                return occ.screenshot_filename
+
+        return None
+
+    @property
+    def selectors(self) -> list[str]:
+        """Return ordered list of selectors for display."""
+
+        selectors: list[str] = []
+
+        for occ in self.occurrences:
+            if occ.selector:
+                selectors.append(occ.selector)
+
+        return selectors
+
+    @property
+    def total(self) -> int:
+        """Total occurrences within the page bucket."""
+
+        return len(self.occurrences)
 
 
 @dataclass
@@ -118,8 +181,11 @@ class PageSummary:
     label: str
 
     url: str
-
     total_violations: int
+
+    report_filename: str | None = None
+
+    source_file: str | None = None
 
     impact_counts: dict[str, int] = field(default_factory=dict)
 
@@ -130,6 +196,8 @@ class PageSummary:
             "label": self.label,
             "url": self.url,
             "total_violations": self.total_violations,
+            "report_filename": self.report_filename,
+            "source_file": self.source_file,
             "impact_counts": dict(self.impact_counts),
         }
 
@@ -274,9 +342,15 @@ def _build_model(results_dir: Path, title: str) -> ReportModel:
                     description=violation.get("description"),
                     help=violation.get("help"),
                     helpUrl=violation.get("helpUrl"),
+                    tags=list(dict.fromkeys(violation.get("tags") or [])),
                 )
 
             grp = groups[rid]
+
+            # Merge in any newly discovered tags while preserving order
+            for tag in violation.get("tags") or []:
+                if tag not in grp.tags:
+                    grp.tags.append(tag)
 
             nodes = violation.get("nodes") or []
 
@@ -307,6 +381,7 @@ def _build_model(results_dir: Path, title: str) -> ReportModel:
                     source_file=source_file,
                     selector=selector,
                     html_snippet=html_snippet,
+                    report_filename=fname,
                     screenshot_path=screenshot_path,
                     failure_summary=failure_summary,
                 )
@@ -324,6 +399,8 @@ def _build_model(results_dir: Path, title: str) -> ReportModel:
                     {
                         "label": source_file or scanned_url or fname,
                         "url": scanned_url,
+                        "source_file": source_file,
+                        "report_filename": fname,
                         "total": 0,
                         "impact_counts": defaultdict(int),
                     },
@@ -342,6 +419,28 @@ def _build_model(results_dir: Path, title: str) -> ReportModel:
             )
         )
 
+        grouped: OrderedDict[str, OccurrencePageGroup] = OrderedDict()
+
+        for occ in grp.occurrences:
+            page_key = occ.source_file or occ.url or "unknown"
+
+            bucket = grouped.get(page_key)
+
+            if not bucket:
+                bucket = OccurrencePageGroup(
+                    key=page_key,
+                    label=occ.source_file
+                    or occ.url
+                    or "Unknown location",
+                    url=occ.url,
+                    source_file=occ.source_file,
+                )
+                grouped[page_key] = bucket
+
+            bucket.occurrences.append(occ)
+
+        grp.page_groups = list(grouped.values())
+
     sorted_groups = sorted(
         groups.values(), key=lambda g: _impact_sort_key(g.impact, g.id)
     )
@@ -355,6 +454,8 @@ def _build_model(results_dir: Path, title: str) -> ReportModel:
             PageSummary(
                 label=bucket["label"],
                 url=bucket["url"],
+                report_filename=bucket.get("report_filename"),
+                source_file=bucket.get("source_file"),
                 total_violations=bucket["total"],
                 impact_counts={
                     level: count
@@ -499,6 +600,16 @@ def build_report(
 
         summary_path: Path | None = None
         summary_web_path: str | None = None
+        pages_web_base: str | None = None
+
+        pages_dir = results_dir.parent / "scan"
+
+        if pages_dir.exists():
+            try:
+                pages_rel = os.path.relpath(pages_dir.resolve(), base_dir)
+                pages_web_base = pages_rel.replace(os.sep, "/")
+            except ValueError:
+                pages_web_base = None
 
         if save_json:
             summary_path = (output_json or output_html.with_suffix(".json")).resolve()
@@ -520,6 +631,7 @@ def build_report(
             model=model,
             results_web_base=results_web_base,
             summary_json=summary_web_path,
+            pages_web_base=pages_web_base,
         )
 
         # Write to file

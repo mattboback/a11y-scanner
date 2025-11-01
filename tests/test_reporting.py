@@ -338,4 +338,4 @@ def test_build_report_counts_multiple_nodes(temp_dirs):
     assert len(rule["occurrences"]) == 2
 
     content = output_file.read_text()
-    assert "2 occurrences" in content
+    assert "2 issues" in content
